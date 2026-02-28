@@ -1,0 +1,3922 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Java Básico - Aprende Java desde Cero</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    
+    <style>
+        /* Estilos personalizados para el Portal Java Básico */
+
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --dark-color: #343a40;
+            --light-color: #f8f9fa;
+            --java-orange: #ED8B00;
+            --java-blue: #5382a1;
+        }
+
+        /* Estilos generales */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--java-blue) 0%, var(--java-orange) 100%);
+            color: white;
+            padding: 100px 0;
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Cards de Semana */
+        .semana-card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .semana-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+        }
+
+        .semana-card.completada {
+            border-left: 5px solid var(--success-color);
+        }
+
+        .semana-card.en-progreso {
+            border-left: 5px solid var(--warning-color);
+        }
+
+        /* Navegación */
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand i {
+            color: var(--java-orange);
+            margin-right: 10px;
+        }
+
+        /* Botones de semana */
+        .semana-btn {
+            margin: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .semana-btn.active {
+            background-color: var(--java-blue);
+            border-color: var(--java-blue);
+            color: white;
+        }
+
+        /* Contenido de lecciones */
+        .leccion-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .codigo-ejemplo {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .codigo-ejemplo pre {
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        /* Editor de código */
+        #editor-codigo {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            background: #2d3748;
+            color: #e2e8f0;
+            border: none;
+            font-size: 14px;
+        }
+
+        #editor-codigo:focus {
+            background: #2d3748;
+            color: #e2e8f0;
+            box-shadow: 0 0 0 0.2rem rgba(237, 139, 0, 0.25);
+        }
+
+        #resultado-codigo {
+            min-height: 100px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        /* Badges de progreso */
+        .badge {
+            font-size: 0.9em;
+            padding: 8px 12px;
+        }
+
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        /* Progress bar personalizada */
+        .progress {
+            height: 25px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.2);
+        }
+
+        .progress-bar {
+            border-radius: 15px;
+            background: linear-gradient(90deg, var(--success-color), var(--java-orange));
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Iconos */
+        .fa-java {
+            color: var(--java-orange);
+        }
+
+        /* Ejercicios */
+        .ejercicio-card {
+            border-left: 4px solid var(--java-blue);
+            margin-bottom: 20px;
+        }
+
+        .solucion {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid var(--success-color);
+        }
+
+        /* Navegación móvil mejorada */
+        .mobile-semana-selector {
+            display: none;
+        }
+
+        .mobile-nav-buttons {
+            display: none;
+        }
+
+        .semana-grid {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+            
+            /* Ocultar botones de grupo en móvil */
+            .btn-group {
+                display: none !important;
+            }
+            
+            /* Mostrar selector móvil */
+            .mobile-semana-selector {
+                display: block;
+            }
+            
+            /* Mostrar navegación móvil */
+            .mobile-nav-buttons {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 20px 0;
+                gap: 10px;
+            }
+            
+            /* Mostrar grid de semanas en móvil */
+            .semana-grid {
+                display: block;
+                margin: 20px 0;
+            }
+            
+            .semana-grid-item {
+                background: #f8f9fa;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                padding: 15px;
+                margin: 10px 0;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            .semana-grid-item:hover {
+                border-color: var(--java-blue);
+                background: #e3f2fd;
+            }
+            
+            .semana-grid-item.active {
+                border-color: var(--java-blue);
+                background: var(--java-blue);
+                color: white;
+            }
+            
+            .semana-grid-item .semana-info h6 {
+                margin: 0 0 5px 0;
+                font-weight: bold;
+            }
+            
+            .semana-grid-item .semana-info p {
+                margin: 0;
+                font-size: 0.9em;
+                opacity: 0.8;
+            }
+            
+            .semana-grid-item .semana-progress {
+                font-size: 0.8em;
+                background: rgba(255,255,255,0.2);
+                padding: 4px 8px;
+                border-radius: 12px;
+                min-width: 60px;
+                text-align: center;
+            }
+            
+            /* Mejorar cards de cronograma en móvil */
+            .semana-card {
+                margin-bottom: 15px;
+            }
+            
+            .semana-card .card-body {
+                padding: 15px;
+            }
+            
+            .semana-card .card-title {
+                font-size: 1rem;
+            }
+            
+            /* Mejorar glosario en móvil */
+            .glosario-categoria {
+                margin-bottom: 20px;
+            }
+            
+            /* Mejorar cheat sheets en móvil */
+            .cheat-sheet-card {
+                margin-bottom: 20px;
+            }
+            
+            .cheat-sheet-preview {
+                max-height: 120px;
+                font-size: 0.75em;
+            }
+            
+            /* Mejorar mini-ejercicios en móvil */
+            .mini-ejercicio {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .ejercicio-opciones .form-check {
+                padding: 10px;
+                margin-bottom: 8px;
+            }
+            
+            .ejercicio-opciones .form-check-label {
+                font-size: 0.9em;
+                line-height: 1.4;
+            }
+            
+            /* Botones móviles */
+            .btn-mobile {
+                flex: 1;
+                font-size: 0.9em;
+                padding: 10px 8px;
+            }
+            
+            /* Navegación principal más compacta */
+            .navbar-nav .nav-item .nav-link {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+            
+            /* Espaciado móvil */
+            .py-5 {
+                padding-top: 3rem !important;
+                padding-bottom: 3rem !important;
+            }
+            
+            .mb-5 {
+                margin-bottom: 2rem !important;
+            }
+            
+            /* Editor de código móvil */
+            #editor-codigo {
+                font-size: 12px;
+                min-height: 200px;
+            }
+            
+            #resultado-codigo {
+                font-size: 12px;
+                min-height: 80px;
+            }
+        }
+
+        /* Para pantallas muy pequeñas */
+        @media (max-width: 480px) {
+            .hero-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero-section .lead {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .semana-grid-item {
+                padding: 12px;
+            }
+            
+            .semana-grid-item .semana-info h6 {
+                font-size: 0.9rem;
+            }
+            
+            .btn-mobile {
+                font-size: 0.8em;
+                padding: 8px 6px;
+            }
+            
+            .mobile-nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .mobile-nav-buttons .btn-group {
+                display: flex !important;
+                width: 100%;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Estilos para el highlighting de código */
+        .token.keyword {
+            color: #c792ea;
+        }
+
+        .token.string {
+            color: #c3e88d;
+        }
+
+        .token.comment {
+            color: #546e7a;
+        }
+
+        .token.number {
+            color: #f78c6c;
+        }
+
+        .token.operator {
+            color: #89ddff;
+        }
+
+        /* Tooltips personalizados */
+        .tooltip-inner {
+            background-color: var(--java-blue);
+            border-radius: 6px;
+        }
+
+        /* Estados de las lecciones */
+        .leccion-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .leccion-item:hover {
+            border-color: var(--java-blue);
+            background: #f8f9fa;
+        }
+
+        .leccion-item.completada {
+            border-color: var(--success-color);
+            background: #d4edda;
+        }
+
+        /* Sección de Teoría */
+        .teoria-card {
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+
+        .teoria-card .blockquote {
+            border-left: 4px solid var(--java-orange);
+            padding-left: 20px;
+            font-style: italic;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .caracteristica-card {
+            border: none;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .caracteristica-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        }
+
+        .caracteristica-card h5 {
+            color: var(--java-blue);
+            margin-bottom: 15px;
+        }
+
+        .caracteristica-card i {
+            color: var(--java-orange);
+            margin-right: 10px;
+        }
+
+        .ecosistema-card {
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .ecosistema-card .list-group-item {
+            border: none;
+            background: transparent;
+            padding: 10px 15px;
+        }
+
+        /* Sección de Glosario */
+        .glosario-categoria {
+            border: none;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .glosario-categoria:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        }
+
+        .glosario-categoria .card-header {
+            background: linear-gradient(135deg, var(--java-blue), var(--java-orange));
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+
+        .glosario-categoria .card-header h5 {
+            margin: 0;
+            color: white;
+        }
+
+        .glosario-categoria .card-header i {
+            color: white;
+            margin-right: 10px;
+        }
+
+        .glosario-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .glosario-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .glosario-item strong {
+            color: var(--java-blue);
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .glosario-item p {
+            margin: 0;
+            color: #6c757d;
+            line-height: 1.5;
+        }
+
+        /* Búsqueda en glosario */
+        #buscar-glosario {
+            border-radius: 25px 0 0 25px;
+            border-right: none;
+        }
+
+        #buscar-glosario:focus {
+            box-shadow: 0 0 0 0.2rem rgba(83, 130, 161, 0.25);
+            border-color: var(--java-blue);
+        }
+
+        .btn-outline-primary {
+            border-radius: 0 25px 25px 0;
+            border-left: none;
+        }
+
+        /* Highlight para búsqueda */
+        .highlight-search {
+            background-color: yellow;
+            font-weight: bold;
+        }
+
+        /* Animación para términos filtrados */
+        .glosario-item.hidden {
+            display: none;
+        }
+
+        .glosario-categoria.empty {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        /* Mini-ejercicios */
+        .mini-ejercicio {
+            background: #f8f9fa;
+            border-left: 4px solid var(--java-blue);
+            transition: all 0.3s ease;
+        }
+
+        .mini-ejercicio:hover {
+            background: #e9ecef;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .mini-ejercicio h6 {
+            color: var(--java-blue);
+            margin-bottom: 15px;
+        }
+
+        .ejercicio-opciones {
+            margin: 15px 0;
+        }
+
+        .ejercicio-opciones .form-check {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .ejercicio-opciones .form-check:hover {
+            background-color: #e3f2fd;
+        }
+
+        .ejercicio-opciones .form-check-input:checked + .form-check-label {
+            font-weight: bold;
+            color: var(--java-blue);
+        }
+
+        .ejercicio-opciones .form-check-label {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        /* Cheat sheets */
+        .cheat-sheet-card {
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .cheat-sheet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .cheat-sheet-card .card-header {
+            background: linear-gradient(135deg, var(--java-blue), var(--java-orange));
+            color: white;
+            border: none;
+            font-weight: bold;
+        }
+
+        .cheat-sheet-preview {
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.85em;
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            max-height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .cheat-sheet-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(transparent, #2d3748);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--success-color), #20c997);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background: linear-gradient(135deg, #20c997, var(--success-color));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        /* Footer */
+        footer a {
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fab fa-java"></i> Java Básico</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#cronograma">Cronograma</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#teoria">Teoría</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#lecciones">Lecciones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#glosario">Glosario</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#cheat-sheets">Cheat Sheets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ejercicios">Ejercicios</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-section">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 mb-4">Aprende Java desde Cero</h1>
+                    <p class="lead mb-4">Portal interactivo para dominar los fundamentos de Java en 8 semanas</p>
+                    <div class="progress mb-4">
+                        <div class="progress-bar" id="progreso-general" role="progressbar" style="width: 0%">0%</div>
+                    </div>
+                    <button class="btn btn-warning btn-lg" onclick="empezarCurso()">
+                        <i class="fas fa-play"></i> Comenzar Curso
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cronograma Section -->
+    <section id="cronograma" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Cronograma de 8 Semanas</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="1">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-cog"></i> Semana 1: Fundamentos</h5>
+                            <p class="card-text">JDK, IDE, Primer programa</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="2">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-database"></i> Semana 2: Variables y Tipos</h5>
+                            <p class="card-text">Tipos primitivos, declaración, casting</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="3">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-calculator"></i> Semana 3: Operadores</h5>
+                            <p class="card-text">Aritméticos, lógicos, comparación</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="4">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-code-branch"></i> Semana 4: Condicionales</h5>
+                            <p class="card-text">if, else, switch, operador ternario</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="5">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-sync"></i> Semana 5: Ciclos</h5>
+                            <p class="card-text">for, while, do-while</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="6">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-function"></i> Semana 6: Métodos</h5>
+                            <p class="card-text">Funciones, parámetros, retorno</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="7">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-cube"></i> Semana 7: Clases y Objetos</h5>
+                            <p class="card-text">POO básica, constructores</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card semana-card" data-semana="8">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-trophy"></i> Semana 8: Práctica</h5>
+                            <p class="card-text">Proyectos y consolidación</p>
+                            <span class="badge bg-secondary">0% completado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teoría Section -->
+    <section id="teoria" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Bienvenido al Universo Java</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card teoria-card">
+                        <div class="card-body">
+                            <h3><i class="fab fa-java"></i> ¿Qué es Java?</h3>
+                            <blockquote class="blockquote">
+                                <p class="mb-0">"Write Once, Run Anywhere" no es solo un eslogan, es la filosofía que ha mantenido a Java relevante por décadas.</p>
+                            </blockquote>
+                            <p>Java es un lenguaje de programación de alto nivel, orientado a objetos, robusto y seguro. Creado por Sun Microsystems en 1995, fue diseñado para tener las menores dependencias de implementación posibles, permitiendo a los desarrolladores escribir código que se ejecuta en cualquier plataforma que soporte Java sin necesidad de recompilación.</p>
+                            
+                            <p>Desde aplicaciones de escritorio y móviles (Android) hasta complejos sistemas empresariales y microservicios en la nube, la Máquina Virtual de Java (JVM) proporciona un entorno de ejecución potente y optimizado que lo convierte en una opción líder en la industria.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-lg-6 mb-4">
+                    <div class="card caracteristica-card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-globe"></i> Independiente de la Plataforma</h5>
+                            <p>Gracias a la JVM, el código Java compilado (bytecode) puede ejecutarse en cualquier sistema operativo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card caracteristica-card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-cube"></i> Orientado a Objetos</h5>
+                            <p>Todo en Java es un objeto, lo que facilita la modularidad, la flexibilidad y la extensibilidad.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card caracteristica-card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-shield-alt"></i> Seguro y Robusto</h5>
+                            <p>Con su gestor de seguridad y manejo de memoria automático, previene errores comunes.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card caracteristica-card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-tachometer-alt"></i> Alto Rendimiento</h5>
+                            <p>El compilador Just-In-Time (JIT) de la JVM optimiza el rendimiento en tiempo de ejecución.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card ecosistema-card">
+                        <div class="card-body">
+                            <h3 class="text-center mb-4"><i class="fas fa-network-wired"></i> Un Ecosistema Vibrante</h3>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h5>Frameworks Populares</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Spring Framework:</strong> El rey del desarrollo empresarial para crear microservicios y web apps.</li>
+                                        <li class="list-group-item"><strong>Jakarta EE:</strong> El estándar para aplicaciones empresariales a gran escala.</li>
+                                        <li class="list-group-item"><strong>Quarkus:</strong> Optimizado para serverless y contenedores por su arranque rápido.</li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h5>Herramientas de Construcción</h5>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><strong>Maven:</strong> Gestión de dependencias y construcción de proyectos con XML.</li>
+                                        <li class="list-group-item"><strong>Gradle:</strong> Flexibilidad y rendimiento superior usando un DSL.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lecciones Section -->
+    <section id="lecciones" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Lecciones Interactivas</h2>
+            
+            <!-- Selector de Semana Desktop -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Selecciona una semana:</h5>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-primary semana-btn active" data-semana="1">Semana 1</button>
+                                <button type="button" class="btn btn-outline-primary semana-btn" data-semana="2">Semana 2</button>
+                                <button type="button" class="btn btn-outline-primary semana-btn" data-semana="3">Semana 3</button>
+                                <button type="button" class="btn btn-outline-primary semana-btn" data-semana="4">Semana 4</button>
+                                <button type="button" class="btn btn-outline-primary semana-btn" data-semana="5">Semana 5</button>
+                                <button type="button" class="btn btn-outline-primary semana-btn" data-semana="6">Semana 6</button>
+                                <button type="button" class="btn btn-outline-primary semana-btn" data-semana="7">Semana 7</button>
+                                <button type="button" class="btn btn-outline-primary semana-btn" data-semana="8">Semana 8</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Selector Móvil -->
+            <div class="mobile-semana-selector">
+                <div class="card">
+                    <div class="card-body">
+                        <h5><i class="fas fa-calendar-week"></i> Selecciona una semana:</h5>
+                        
+                        <!-- Navegación rápida móvil -->
+                        <div class="mobile-nav-buttons">
+                            <button class="btn btn-outline-secondary btn-mobile" id="btn-anterior" onclick="cambiarSemana(-1)">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div class="btn-group">
+                                <button class="btn btn-primary dropdown-toggle btn-mobile" type="button" data-bs-toggle="dropdown">
+                                    <span id="semana-actual-text">Semana 1</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="1">Semana 1: Fundamentos</a></li>
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="2">Semana 2: Variables</a></li>
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="3">Semana 3: Operadores</a></li>
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="4">Semana 4: Condicionales</a></li>
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="5">Semana 5: Ciclos</a></li>
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="6">Semana 6: Métodos</a></li>
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="7">Semana 7: Clases</a></li>
+                                    <li><a class="dropdown-item semana-dropdown" href="#" data-semana="8">Semana 8: Práctica</a></li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-mobile" id="btn-siguiente" onclick="cambiarSemana(1)">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Grid de semanas móvil -->
+                        <div class="semana-grid">
+                            <div class="semana-grid-item active" data-semana="1">
+                                <div class="semana-info">
+                                    <h6>Semana 1: Fundamentos</h6>
+                                    <p>JDK, IDE, Primer programa</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                            <div class="semana-grid-item" data-semana="2">
+                                <div class="semana-info">
+                                    <h6>Semana 2: Variables y Tipos</h6>
+                                    <p>Tipos primitivos, declaración, casting</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                            <div class="semana-grid-item" data-semana="3">
+                                <div class="semana-info">
+                                    <h6>Semana 3: Operadores</h6>
+                                    <p>Aritméticos, lógicos, comparación</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                            <div class="semana-grid-item" data-semana="4">
+                                <div class="semana-info">
+                                    <h6>Semana 4: Condicionales</h6>
+                                    <p>if, else, switch, operador ternario</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                            <div class="semana-grid-item" data-semana="5">
+                                <div class="semana-info">
+                                    <h6>Semana 5: Ciclos</h6>
+                                    <p>for, while, do-while</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                            <div class="semana-grid-item" data-semana="6">
+                                <div class="semana-info">
+                                    <h6>Semana 6: Métodos</h6>
+                                    <p>Funciones, parámetros, retorno</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                            <div class="semana-grid-item" data-semana="7">
+                                <div class="semana-info">
+                                    <h6>Semana 7: Clases y Objetos</h6>
+                                    <p>POO básica, constructores</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                            <div class="semana-grid-item" data-semana="8">
+                                <div class="semana-info">
+                                    <h6>Semana 8: Práctica</h6>
+                                    <p>Proyectos y consolidación</p>
+                                </div>
+                                <div class="semana-progress">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenido de Lecciones -->
+            <div id="contenido-leccion">
+                <!-- El contenido se carga dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Glosario Section -->
+    <section id="glosario" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Glosario de Términos Java</h2>
+            
+            <!-- Búsqueda en el glosario -->
+            <div class="row mb-4">
+                <div class="col-lg-6 mx-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="buscar-glosario" placeholder="Buscar en el glosario...">
+                        <button class="btn btn-outline-primary" type="button" onclick="buscarEnGlosario()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Fundamentos -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-foundation"></i> Fundamentos</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>Java:</strong>
+                                <p>Lenguaje de programación orientado a objetos, multiplataforma y de propósito general. Conocido por su filosofía "Write Once, Run Anywhere" (Escribe una vez, ejecuta en cualquier lugar).</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>JDK (Java Development Kit):</strong>
+                                <p>Conjunto completo de herramientas para desarrollar aplicaciones Java. Incluye el compilador (javac), la JVM, debugger y las librerías estándar.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>JVM (Java Virtual Machine):</strong>
+                                <p>Máquina virtual que ejecuta el bytecode Java. Es la clave que permite que Java sea independiente de la plataforma y del sistema operativo.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>JRE (Java Runtime Environment):</strong>
+                                <p>Entorno mínimo necesario para ejecutar aplicaciones Java. Incluye la JVM y las librerías básicas, pero no las herramientas de desarrollo.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Bytecode:</strong>
+                                <p>Código intermedio que genera el compilador Java (.class). Es independiente de la plataforma y es interpretado por la JVM.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>IDE (Integrated Development Environment):</strong>
+                                <p>Entorno de desarrollo integrado como IntelliJ IDEA, Eclipse o VS Code que facilita escribir, compilar, debuggear y ejecutar código Java.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Compilación:</strong>
+                                <p>Proceso de convertir código fuente Java (.java) en bytecode (.class) usando el compilador javac.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Variables y Tipos -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-database"></i> Variables y Tipos</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>Variable:</strong>
+                                <p>Espacio en memoria que almacena un valor y tiene un nombre identificador. Ejemplo: int edad = 25;</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Tipos Primitivos:</strong>
+                                <p>Tipos básicos de datos en Java: int (enteros), double (decimales), boolean (verdadero/falso), char (caracteres), byte, short, long, float.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>String:</strong>
+                                <p>Tipo de dato para almacenar cadenas de texto. No es primitivo, es una clase. Ejemplo: String nombre = "Kevin";</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Casting:</strong>
+                                <p>Conversión de un tipo de dato a otro. Puede ser implícita (automática) o explícita (manual). Ejemplo: int x = (int) 3.14;</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Constante (final):</strong>
+                                <p>Variable cuyo valor no puede cambiar después de ser inicializada. Se declara con 'final'. Ejemplo: final double PI = 3.14159;</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Declaración:</strong>
+                                <p>Acto de crear una variable especificando su tipo y nombre. Ejemplo: int numero; (sin valor inicial)</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Inicialización:</strong>
+                                <p>Asignar un valor inicial a una variable al momento de declararla. Ejemplo: int numero = 10;</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Programación Orientada a Objetos -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-cube"></i> Programación Orientada a Objetos</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>Clase:</strong>
+                                <p>Plantilla o molde que define los atributos y métodos que tendrán los objetos.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Objeto:</strong>
+                                <p>Instancia específica de una clase con valores concretos para sus atributos.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Atributo:</strong>
+                                <p>Variable que pertenece a una clase y representa una característica del objeto.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Método:</strong>
+                                <p>Función que pertenece a una clase y define un comportamiento del objeto.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Constructor:</strong>
+                                <p>Método especial que se ejecuta al crear un objeto y sirve para inicializarlo.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Encapsulación:</strong>
+                                <p>Principio que oculta los detalles internos de una clase usando modificadores de acceso.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Herencia:</strong>
+                                <p>Mecanismo que permite a una clase (hija) adquirir características de otra (padre).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estructuras de Control -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-code-branch"></i> Estructuras de Control</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>Condición:</strong>
+                                <p>Expresión que evalúa a verdadero (true) o falso (false). Base de las estructuras de control. Ejemplo: edad >= 18</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Condicional (if-else):</strong>
+                                <p>Estructura que permite ejecutar código basado en el cumplimiento de una condición. if (condición) { código }</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Switch:</strong>
+                                <p>Estructura que permite elegir entre múltiples opciones basadas en el valor de una variable. Alternativa a múltiples if-else.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Operador Ternario (? :):</strong>
+                                <p>Forma abreviada de escribir una condición simple if-else en una línea. condición ? valorSiTrue : valorSiFalse</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Bucle/Loop:</strong>
+                                <p>Estructura que repite un bloque de código mientras se cumpla una condición. Los tipos principales son for, while y do-while.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Iteración:</strong>
+                                <p>Cada repetición individual de un bucle. Una vuelta completa del ciclo.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>break:</strong>
+                                <p>Palabra clave que termina inmediatamente un bucle o sale de un switch.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>continue:</strong>
+                                <p>Palabra clave que salta a la siguiente iteración de un bucle, omitiendo el resto del código en la iteración actual.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Términos Avanzados -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-cogs"></i> Términos Avanzados</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>Array:</strong>
+                                <p>Estructura de datos que almacena múltiples elementos del mismo tipo en posiciones consecutivas.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Sobrecarga de Métodos:</strong>
+                                <p>Capacidad de tener múltiples métodos con el mismo nombre pero diferentes parámetros.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Getter/Setter:</strong>
+                                <p>Métodos que permiten acceder (get) y modificar (set) atributos privados de una clase.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>this:</strong>
+                                <p>Palabra clave que hace referencia al objeto actual dentro de una clase.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>static:</strong>
+                                <p>Modificador que indica que un método o atributo pertenece a la clase, no a instancias específicas.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Excepciones:</strong>
+                                <p>Errores que ocurren durante la ejecución del programa y que pueden ser manejados con try-catch.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Herramientas y Conceptos -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-tools"></i> Herramientas y Conceptos</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>Maven:</strong>
+                                <p>Herramienta de gestión y construcción de proyectos Java. Maneja dependencias, compilación y empaquetado mediante un archivo pom.xml.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Gradle:</strong>
+                                <p>Herramienta moderna de construcción de proyectos que ofrece más flexibilidad que Maven. Usa un DSL (Domain Specific Language).</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Librería:</strong>
+                                <p>Conjunto de clases y métodos predefinidos que puedes usar en tu proyecto. Ejemplo: librería para manejo de fechas, JSON, etc.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Framework:</strong>
+                                <p>Conjunto de librerías y herramientas que proporcionan una estructura para desarrollar aplicaciones. Ejemplo: Spring, Hibernate.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>API (Application Programming Interface):</strong>
+                                <p>Conjunto de clases y métodos que Java proporciona para realizar tareas específicas. También se refiere a interfaces entre sistemas.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Package:</strong>
+                                <p>Forma de organizar clases relacionadas en un mismo espacio de nombres. Ejemplo: java.util, java.io</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Import:</strong>
+                                <p>Declaración que permite usar clases de otros packages sin escribir su nombre completo. Ejemplo: import java.util.Scanner;</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Debugging:</strong>
+                                <p>Proceso de encontrar y corregir errores (bugs) en el código usando herramientas especiales del IDE.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nueva fila para conceptos adicionales -->
+            <div class="row">
+                <!-- Conceptos de Programación -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-brain"></i> Conceptos de Programación</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>Algoritmo:</strong>
+                                <p>Secuencia de pasos lógicos y ordenados para resolver un problema específico. La base de cualquier programa.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Sintaxis:</strong>
+                                <p>Reglas que definen cómo se debe escribir el código en Java. Incluye uso de llaves {}, punto y coma ;, etc.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Lógica de Programación:</strong>
+                                <p>Capacidad de pensar de manera secuencial y estructurada para resolver problemas mediante código.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Pseudocódigo:</strong>
+                                <p>Descripción informal de la lógica de un programa usando lenguaje natural antes de escribir código real.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Comentario:</strong>
+                                <p>Texto en el código que no se ejecuta, usado para explicar qué hace el código. En Java: // línea o /* bloque */</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Indentación:</strong>
+                                <p>Espacios o tabs al inicio de las líneas para organizar visualmente el código y mostrar su estructura.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conceptos de Ejecución -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card glosario-categoria">
+                        <div class="card-header">
+                            <h5><i class="fas fa-cogs"></i> Conceptos de Ejecución</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="glosario-item">
+                                <strong>main():</strong>
+                                <p>Método principal donde inicia la ejecución de cualquier programa Java. public static void main(String[] args)</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Sistema de Tipos:</strong>
+                                <p>Java es fuertemente tipado, significa que cada variable debe tener un tipo específico declarado (int, String, etc.)</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Garbage Collector:</strong>
+                                <p>Sistema automático de Java que libera memoria de objetos que ya no se usan, evitando memory leaks.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Stack y Heap:</strong>
+                                <p>Áreas de memoria donde se almacenan variables locales (Stack) y objetos (Heap) durante la ejecución.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>Classpath:</strong>
+                                <p>Ruta donde la JVM busca las clases y librerías necesarias para ejecutar un programa Java.</p>
+                            </div>
+                            <div class="glosario-item">
+                                <strong>JAR (Java Archive):</strong>
+                                <p>Archivo comprimido que contiene clases Java compiladas y recursos. Formato estándar para distribuir aplicaciones Java.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cheat Sheets Section -->
+    <section id="cheat-sheets" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Cheat Sheets Descargables</h2>
+            <p class="text-center text-muted mb-5">Guías de referencia rápida para estudiar y consultar mientras programas</p>
+            
+            <div class="row">
+                <!-- Variables y Tipos -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card cheat-sheet-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-database"></i> Variables y Tipos de Datos</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Referencia rápida de todos los tipos primitivos, declaración de variables y casting.</p>
+                            <div class="cheat-sheet-preview">
+// Tipos primitivos
+int numero = 10;
+double precio = 19.99;
+boolean activo = true;
+char letra = 'A';
+
+// Casting
+int x = (int) 3.14;
+String texto = String.valueOf(123);
+                            </div>
+                            <button class="btn btn-download btn-sm w-100" onclick="descargarCheatSheet('variables')">
+                                <i class="fas fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Operadores -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card cheat-sheet-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-calculator"></i> Operadores</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Todos los operadores: aritméticos, lógicos, de comparación y asignación.</p>
+                            <div class="cheat-sheet-preview">
+// Aritméticos
++ - * / %
+
+// Comparación
+== != < > <= >=
+
+// Lógicos
+&& || !
+
+// Asignación
+= += -= *= /=
+                            </div>
+                            <button class="btn btn-download btn-sm w-100" onclick="descargarCheatSheet('operadores')">
+                                <i class="fas fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estructuras de Control -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card cheat-sheet-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-code-branch"></i> Estructuras de Control</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Condicionales (if, switch) y bucles (for, while, do-while) con ejemplos.</p>
+                            <div class="cheat-sheet-preview">
+// If-else
+if (edad >= 18) {
+    // código
+} else {
+    // código
+}
+
+// For loop
+for (int i = 0; i < 10; i++) {
+    // código
+}
+                            </div>
+                            <button class="btn btn-download btn-sm w-100" onclick="descargarCheatSheet('control')">
+                                <i class="fas fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Métodos -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card cheat-sheet-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-function"></i> Métodos</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Declaración de métodos, parámetros, retorno y sobrecarga con ejemplos prácticos.</p>
+                            <div class="cheat-sheet-preview">
+// Método básico
+public static int sumar(int a, int b) {
+    return a + b;
+}
+
+// Método void
+public static void saludar(String nombre) {
+    System.out.println("Hola " + nombre);
+}
+                            </div>
+                            <button class="btn btn-download btn-sm w-100" onclick="descargarCheatSheet('metodos')">
+                                <i class="fas fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clases y Objetos -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card cheat-sheet-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-cube"></i> Clases y Objetos</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Definición de clases, constructores, atributos, métodos y encapsulación básica.</p>
+                            <div class="cheat-sheet-preview">
+public class Persona {
+    private String nombre;
+    
+    public Persona(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public String getNombre() {
+        return nombre;
+    }
+}
+                            </div>
+                            <button class="btn btn-download btn-sm w-100" onclick="descargarCheatSheet('clases')">
+                                <i class="fas fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sintaxis Básica -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card cheat-sheet-card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-code"></i> Sintaxis Básica</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Reglas de sintaxis, convenciones de nomenclatura y buenas prácticas.</p>
+                            <div class="cheat-sheet-preview">
+// Nomenclatura
+public class MiClase {}
+int miVariable;
+final int CONSTANTE = 10;
+
+// Comentarios
+// Línea
+/* Bloque */
+
+// Estructura básica
+public static void main(String[] args) {
+    // código aquí
+}
+                            </div>
+                            <button class="btn btn-download btn-sm w-100" onclick="descargarCheatSheet('sintaxis')">
+                                <i class="fas fa-download"></i> Descargar PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12 text-center">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>Tip:</strong> Descarga todos los cheat sheets y tenlos a mano mientras programas. 
+                        Son perfectos para consulta rápida y estudio offline.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ejercicios Section -->
+    <section id="ejercicios" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Ejercicios Prácticos</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Editor de Código Java</h5>
+                            <textarea id="editor-codigo" class="form-control mb-3" rows="10" placeholder="Escribe tu código Java aquí...">public class MiPrograma {
+    public static void main(String[] args) {
+        System.out.println("¡Hola Mundo!");
+    }
+}</textarea>
+                            <button class="btn btn-success" onclick="ejecutarCodigo()">
+                                <i class="fas fa-play"></i> Ejecutar Código
+                            </button>
+                            <button class="btn btn-secondary" onclick="limpiarCodigo()">
+                                <i class="fas fa-eraser"></i> Limpiar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Resultado:</h5>
+                            <pre id="resultado-codigo" class="bg-dark text-light p-3 rounded">Aquí aparecerá el resultado de tu código...</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p>&copy; 2024 Portal Java Básico. Creado para aprender Java de forma interactiva.</p>
+            <p>Desarrollado por: <strong>Kevin Arauz</strong> (<a href="https://github.com/kevinarauz" class="text-warning">@kevinarauz</a>)</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    
+    <script>
+        // JavaScript para el Portal Java Básico
+
+        // Variables globales
+        let progresoGeneral = 0;
+        let semanaActual = 1;
+        let leccionesCompletadas = JSON.parse(localStorage.getItem('leccionesCompletadas')) || {};
+
+        // Contenido educativo por semana
+        const contenidoPorSemana = {
+            1: {
+                titulo: "Fundamentos y Configuración",
+                lecciones: [
+                    {
+                        id: "jdk",
+                        titulo: "¿Qué es el JDK?",
+                        contenido: `
+                            <h4>Java Development Kit (JDK)</h4>
+                            <p>El JDK es un conjunto de herramientas necesarias para desarrollar aplicaciones Java:</p>
+                            <ul>
+                                <li><strong>JRE (Java Runtime Environment):</strong> Necesario para ejecutar aplicaciones Java</li>
+                                <li><strong>Compilador (javac):</strong> Convierte código Java a bytecode</li>
+                                <li><strong>Herramientas de desarrollo:</strong> Debugger, documentación, etc.</li>
+                            </ul>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-bash"># Verificar instalación de Java
+java --version
+javac --version</code></pre>
+                            </div>
+                        `,
+                        ejercicio: "Instala JDK 8 o superior y verifica la instalación con los comandos mostrados.",
+                        miniEjercicio: {
+                            pregunta: "¿Qué significa JDK en Java?",
+                            opciones: [
+                                "Java Download Kit",
+                                "Java Development Kit", 
+                                "Java Debug Kit",
+                                "Java Deployment Kit"
+                            ],
+                            respuestaCorrecta: 1
+                        }
+                    },
+                    {
+                        id: "ide",
+                        titulo: "Configuración del IDE",
+                        contenido: `
+                            <h4>Entornos de Desarrollo Integrado (IDE)</h4>
+                            <p>Un IDE facilita el desarrollo con funciones como:</p>
+                            <ul>
+                                <li><strong>IntelliJ IDEA:</strong> IDE profesional con muchas características</li>
+                                <li><strong>Eclipse:</strong> IDE gratuito y popular</li>
+                                <li><strong>VS Code:</strong> Editor ligero con extensiones Java</li>
+                            </ul>
+                            <p><strong>Extensiones recomendadas para VS Code:</strong></p>
+                            <ul>
+                                <li>Extension Pack for Java</li>
+                                <li>Java Code Generators</li>
+                                <li>Spring Boot Extension Pack</li>
+                            </ul>
+                        `,
+                        ejercicio: "Instala tu IDE preferido y crea un nuevo proyecto Java."
+                    },
+                    {
+                        id: "hola-mundo",
+                        titulo: "Tu Primer Programa Java",
+                        contenido: `
+                            <h4>¡Hola Mundo en Java!</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">public class HolaMundo {
+    public static void main(String[] args) {
+        System.out.println("¡Hola Mundo!");
+    }
+}</code></pre>
+                            </div>
+                            <p><strong>Explicación línea por línea:</strong></p>
+                            <ul>
+                                <li><code>public class HolaMundo</code>: Define una clase pública</li>
+                                <li><code>public static void main</code>: Método principal, punto de entrada</li>
+                                <li><code>String[] args</code>: Parámetros de línea de comandos</li>
+                                <li><code>System.out.println</code>: Imprime texto en consola</li>
+                            </ul>
+                        `,
+                        ejercicio: "Crea y ejecuta tu primer programa 'Hola Mundo'.",
+                        miniEjercicio: {
+                            pregunta: "¿Cuál es el método que sirve como punto de entrada en un programa Java?",
+                            opciones: [
+                                "public void start()",
+                                "public static void main(String[] args)",
+                                "public void begin()",
+                                "public class main()"
+                            ],
+                            respuestaCorrecta: 1
+                        }
+                    }
+                ]
+            },
+            2: {
+                titulo: "Variables y Tipos de Datos",
+                lecciones: [
+                    {
+                        id: "tipos-primitivos",
+                        titulo: "Tipos de Datos Primitivos",
+                        contenido: `
+                            <h4>Tipos Primitivos en Java</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Números enteros
+byte edad = 25;        // 8 bits (-128 a 127)
+short año = 2024;      // 16 bits (-32,768 a 32,767)
+int poblacion = 50000; // 32 bits (-2^31 a 2^31-1)
+long distancia = 123456789L; // 64 bits
+
+// Números decimales
+float precio = 19.99f; // 32 bits, precisión simple
+double pi = 3.14159265359; // 64 bits, precisión doble
+
+// Otros tipos
+boolean activo = true;     // true o false
+char inicial = 'K';        // Un solo carácter Unicode</code></pre>
+                            </div>
+                            <p><strong>Consejos importantes:</strong></p>
+                            <ul>
+                                <li>Usa <code>int</code> para números enteros normales</li>
+                                <li>Usa <code>double</code> para números decimales</li>
+                                <li>Agrega 'L' al final de números long</li>
+                                <li>Agrega 'f' al final de números float</li>
+                            </ul>
+                        `,
+                        ejercicio: "Declara variables de cada tipo primitivo y asigna valores apropiados.",
+                        miniEjercicio: {
+                            pregunta: "¿Cuál es el tipo de dato más apropiado para almacenar el precio de un producto?",
+                            opciones: [
+                                "int",
+                                "boolean", 
+                                "double",
+                                "char"
+                            ],
+                            respuestaCorrecta: 2
+                        }
+                    },
+                    {
+                        id: "declaracion-variables",
+                        titulo: "Declaración de Variables",
+                        contenido: `
+                            <h4>Cómo Declarar Variables</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Declaración sin inicialización
+int numero;
+String nombre;
+
+// Declaración con inicialización
+int edad = 20;
+String ciudad = "San José";
+
+// Múltiples variables del mismo tipo
+int x = 10, y = 20, z = 30;
+
+// Constantes (no pueden cambiar)
+final double PI = 3.14159;
+final String PAIS = "Costa Rica";</code></pre>
+                            </div>
+                            <p><strong>Reglas para nombres de variables:</strong></p>
+                            <ul>
+                                <li>Comenzar con letra, $ o _</li>
+                                <li>No usar palabras reservadas (int, class, public, etc.)</li>
+                                <li>Usar camelCase: miVariable, nombreCompleto</li>
+                                <li>Constantes en MAYÚSCULAS: PI, MAX_SIZE</li>
+                            </ul>
+                        `,
+                        ejercicio: "Crea variables para almacenar tu información personal: nombre, edad, altura, ciudad."
+                    },
+                    {
+                        id: "casting",
+                        titulo: "Conversión de Tipos (Casting)",
+                        contenido: `
+                            <h4>Conversión de Tipos</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Conversión automática (implícita)
+int entero = 10;
+double decimal = entero; // 10.0
+
+// Conversión manual (explícita)
+double precio = 19.99;
+int precioEntero = (int) precio; // 19
+
+// Conversión con métodos
+String numeroTexto = "123";
+int numero = Integer.parseInt(numeroTexto);
+
+String edadTexto = String.valueOf(25);
+
+// Cuidado con la pérdida de precisión
+double pi = 3.14159;
+int piEntero = (int) pi; // 3 (se pierde .14159)</code></pre>
+                            </div>
+                            <p><strong>Tipos de conversión:</strong></p>
+                            <ul>
+                                <li><strong>Implícita:</strong> De menor a mayor tamaño automáticamente</li>
+                                <li><strong>Explícita:</strong> Necesita especificar el tipo entre paréntesis</li>
+                                <li><strong>Métodos:</strong> Para convertir entre String y números</li>
+                            </ul>
+                        `,
+                        ejercicio: "Practica conversiones entre int, double y String."
+                    }
+                ]
+            },
+            3: {
+                titulo: "Operadores",
+                lecciones: [
+                    {
+                        id: "operadores-aritmeticos",
+                        titulo: "Operadores Aritméticos",
+                        contenido: `
+                            <h4>Operaciones Matemáticas Básicas</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">int a = 10, b = 3;
+
+// Operadores básicos
+int suma = a + b;        // 13
+int resta = a - b;       // 7
+int multiplicacion = a * b; // 30
+int division = a / b;    // 3 (división entera)
+int modulo = a % b;      // 1 (resto de la división)
+
+// División con decimales
+double divisionReal = (double) a / b; // 3.333...
+
+// Operadores de incremento/decremento
+a++;  // a = a + 1 (post-incremento)
+++a;  // a = a + 1 (pre-incremento)
+b--;  // b = b - 1 (post-decremento)
+--b;  // b = b - 1 (pre-decremento)</code></pre>
+                            </div>
+                            <p><strong>Diferencia entre ++ antes y después:</strong></p>
+                            <ul>
+                                <li><code>++x</code>: Incrementa primero, luego usa el valor</li>
+                                <li><code>x++</code>: Usa el valor primero, luego incrementa</li>
+                            </ul>
+                        `,
+                        ejercicio: "Crea una calculadora simple que realice las 5 operaciones básicas."
+                    },
+                    {
+                        id: "operadores-comparacion",
+                        titulo: "Operadores de Comparación",
+                        contenido: `
+                            <h4>Comparando Valores</h4>
+                            <p>Los operadores de comparación devuelven <code>true</code> o <code>false</code>:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">int x = 10, y = 20;
+
+// Operadores de comparación
+boolean igual = (x == y);           // false
+boolean diferente = (x != y);       // true
+boolean mayor = (x > y);            // false
+boolean menor = (x < y);            // true
+boolean mayorIgual = (x >= 10);     // true
+boolean menorIgual = (y <= 20);     // true
+
+// Comparación de Strings (¡OJO!)
+String s1 = "Hola";
+String s2 = "Hola";
+boolean sonIguales = s1.equals(s2); // true (forma correcta)
+boolean mal = (s1 == s2);           // puede fallar, NO usar</code></pre>
+                            </div>
+                            <div class="alert alert-warning">
+                                <strong>⚠️ Importante:</strong> Para comparar Strings siempre usa <code>.equals()</code>,
+                                nunca <code>==</code> que compara referencias, no contenido.
+                            </div>
+                        `,
+                        ejercicio: "Crea un programa que compare dos números ingresados y muestre todas las relaciones de comparación.",
+                        miniEjercicio: {
+                            pregunta: "¿Qué imprime: int x = 5; System.out.println(x > 3 && x < 10);?",
+                            opciones: ["true", "false", "Error de compilación", "null"],
+                            respuestaCorrecta: 0
+                        }
+                    },
+                    {
+                        id: "operadores-logicos",
+                        titulo: "Operadores Lógicos",
+                        contenido: `
+                            <h4>Operadores AND, OR, NOT</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">boolean a = true, b = false;
+
+// Operadores lógicos
+boolean and = a && b;    // false (ambos deben ser true)
+boolean or = a || b;     // true (al menos uno es true)
+boolean not = !a;        // false (invierte el valor)
+
+// Ejemplo práctico: validación de edad
+int edad = 25;
+boolean esMayorDeEdad = edad >= 18;
+boolean esAdultoJoven = edad >= 18 && edad <= 35;
+
+// Operador ternario (if-else abreviado)
+String mensaje = edad >= 18 ? "Mayor de edad" : "Menor de edad";
+
+// Short-circuit: no evalúa todo si no es necesario
+int x = 0;
+boolean resultado = (x != 0) && (10 / x > 2); // No da error, no divide</code></pre>
+                            </div>
+                            <h5>Tabla de Verdad</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>A</th><th>B</th><th>A && B</th><th>A || B</th><th>!A</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>true</td><td>true</td><td>true</td><td>true</td><td>false</td></tr>
+                                    <tr><td>true</td><td>false</td><td>false</td><td>true</td><td>false</td></tr>
+                                    <tr><td>false</td><td>true</td><td>false</td><td>true</td><td>true</td></tr>
+                                    <tr><td>false</td><td>false</td><td>false</td><td>false</td><td>true</td></tr>
+                                </tbody>
+                            </table>
+                        `,
+                        ejercicio: "Implementa un sistema de validación de login que verifique usuario y contraseña."
+                    }
+                ]
+            },
+            4: {
+                titulo: "Estructuras de Control - Condicionales",
+                lecciones: [
+                    {
+                        id: "if-else",
+                        titulo: "Condicional if-else",
+                        contenido: `
+                            <h4>Tomando Decisiones en Java</h4>
+                            <p>La estructura <code>if-else</code> permite ejecutar código basado en condiciones:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// if simple
+int edad = 20;
+if (edad >= 18) {
+    System.out.println("Eres mayor de edad");
+}
+
+// if-else
+if (edad >= 18) {
+    System.out.println("Mayor de edad");
+} else {
+    System.out.println("Menor de edad");
+}
+
+// if-else if-else (múltiples condiciones)
+int nota = 85;
+if (nota >= 90) {
+    System.out.println("Excelente: A");
+} else if (nota >= 80) {
+    System.out.println("Muy bien: B");
+} else if (nota >= 70) {
+    System.out.println("Bien: C");
+} else if (nota >= 60) {
+    System.out.println("Aprobado: D");
+} else {
+    System.out.println("Reprobado: F");
+}
+
+// Operador ternario (if-else corto)
+String resultado = (nota >= 60) ? "Aprobado" : "Reprobado";</code></pre>
+                            </div>
+                            <div class="alert alert-info">
+                                <strong>💡 Tip:</strong> Las llaves <code>{}</code> son opcionales si solo hay una línea,
+                                pero es mejor usarlas siempre para evitar errores.
+                            </div>
+                        `,
+                        ejercicio: "Crea un programa que determine si un número es positivo, negativo o cero.",
+                        miniEjercicio: {
+                            pregunta: "¿Qué imprime: int x = 5; String msg = (x > 10) ? \"Grande\" : \"Pequeño\";?",
+                            opciones: ["Grande", "Pequeño", "Error", "null"],
+                            respuestaCorrecta: 1
+                        }
+                    },
+                    {
+                        id: "switch",
+                        titulo: "Switch Statement",
+                        contenido: `
+                            <h4>Múltiples Opciones con Switch</h4>
+                            <p>Cuando tienes muchas opciones discretas, <code>switch</code> es más legible que múltiples <code>if-else</code>:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Switch tradicional
+int dia = 3;
+String nombreDia;
+
+switch (dia) {
+    case 1:
+        nombreDia = "Lunes";
+        break;
+    case 2:
+        nombreDia = "Martes";
+        break;
+    case 3:
+        nombreDia = "Miércoles";
+        break;
+    case 4:
+        nombreDia = "Jueves";
+        break;
+    case 5:
+        nombreDia = "Viernes";
+        break;
+    case 6:
+    case 7:
+        nombreDia = "Fin de semana";
+        break;
+    default:
+        nombreDia = "Día inválido";
+}
+
+System.out.println(nombreDia); // Miércoles
+
+// Switch con String
+String mes = "enero";
+int dias;
+
+switch (mes.toLowerCase()) {
+    case "enero":
+    case "marzo":
+    case "mayo":
+    case "julio":
+    case "agosto":
+    case "octubre":
+    case "diciembre":
+        dias = 31;
+        break;
+    case "abril":
+    case "junio":
+    case "septiembre":
+    case "noviembre":
+        dias = 30;
+        break;
+    case "febrero":
+        dias = 28;
+        break;
+    default:
+        dias = 0;
+}
+
+System.out.println(mes + " tiene " + dias + " días");</code></pre>
+                            </div>
+                            <div class="alert alert-warning">
+                                <strong>⚠️ Importante:</strong> No olvides el <code>break;</code> al final de cada caso,
+                                o el código continuará ejecutándose en los siguientes casos (fall-through).
+                            </div>
+                        `,
+                        ejercicio: "Crea una calculadora usando switch que realice operaciones según un símbolo (+, -, *, /)."
+                    },
+                    {
+                        id: "condicionales-anidadas",
+                        titulo: "Condicionales Anidadas y Buenas Prácticas",
+                        contenido: `
+                            <h4>Condicionales Dentro de Condicionales</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Anidación de if
+int edad = 25;
+boolean tieneLicencia = true;
+
+if (edad >= 18) {
+    if (tieneLicencia) {
+        System.out.println("Puede conducir");
+    } else {
+        System.out.println("Necesita sacar licencia");
+    }
+} else {
+    System.out.println("Muy joven para conducir");
+}
+
+// Mejor forma: combinando condiciones
+if (edad >= 18 && tieneLicencia) {
+    System.out.println("Puede conducir");
+} else if (edad >= 18 && !tieneLicencia) {
+    System.out.println("Necesita sacar licencia");
+} else {
+    System.out.println("Muy joven para conducir");
+}
+
+// Validación de entrada
+String input = ""; // puede venir de Scanner
+
+if (input == null || input.isEmpty()) {
+    System.out.println("Entrada inválida");
+} else if (input.length() < 3) {
+    System.out.println("Muy corto");
+} else {
+    System.out.println("Entrada válida: " + input);
+}</code></pre>
+                            </div>
+                            <h5>Buenas Prácticas</h5>
+                            <ul>
+                                <li>Evita anidar más de 2-3 niveles de profundidad</li>
+                                <li>Usa operadores lógicos (&&, ||) para simplificar</li>
+                                <li>Valida primero los casos de error o excepciones</li>
+                                <li>Mantén las condiciones simples y legibles</li>
+                                <li>Usa constantes para valores mágicos</li>
+                            </ul>
+                        `,
+                        ejercicio: "Crea un sistema de autenticación que valide usuario, contraseña y que la cuenta esté activa."
+                    }
+                ]
+            },
+            5: {
+                titulo: "Ciclos Repetitivos",
+                lecciones: [
+                    {
+                        id: "for-loop",
+                        titulo: "Ciclo For",
+                        contenido: `
+                            <h4>Repetir Código un Número Específico de Veces</h4>
+                            <p>El ciclo <code>for</code> es ideal cuando sabes cuántas veces necesitas repetir algo:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// For básico: imprimir números del 1 al 10
+for (int i = 1; i <= 10; i++) {
+    System.out.println("Número: " + i);
+}
+
+// For con diferentes incrementos
+for (int i = 0; i < 100; i += 10) {
+    System.out.println(i); // 0, 10, 20, 30...
+}
+
+// For descendente
+for (int i = 10; i >= 1; i--) {
+    System.out.println(i); // Cuenta regresiva
+}
+
+// For anidado: tabla de multiplicar
+for (int tabla = 1; tabla <= 5; tabla++) {
+    System.out.println("Tabla del " + tabla + ":");
+    for (int num = 1; num <= 10; num++) {
+        System.out.println(tabla + " x " + num + " = " + (tabla * num));
+    }
+    System.out.println(); // línea en blanco
+}
+
+// For-each (para recorrer arrays)
+int[] numeros = {10, 20, 30, 40, 50};
+for (int numero : numeros) {
+    System.out.println(numero);
+}
+
+String[] nombres = {"Ana", "Luis", "María"};
+for (String nombre : nombres) {
+    System.out.println("Hola, " + nombre);
+}</code></pre>
+                            </div>
+                            <div class="alert alert-info">
+                                <strong>💡 Estructura del for:</strong> <code>for (inicialización; condición; incremento) { código }</code>
+                            </div>
+                        `,
+                        ejercicio: "Crea un programa que imprima la suma de los primeros 100 números naturales.",
+                        miniEjercicio: {
+                            pregunta: "¿Cuántas veces se ejecuta: for (int i = 0; i < 5; i++)?",
+                            opciones: ["4 veces", "5 veces", "6 veces", "Infinitas veces"],
+                            respuestaCorrecta: 1
+                        }
+                    },
+                    {
+                        id: "while-loop",
+                        titulo: "Ciclo While",
+                        contenido: `
+                            <h4>Repetir Mientras una Condición sea Verdadera</h4>
+                            <p>El ciclo <code>while</code> se usa cuando no sabes exactamente cuántas iteraciones necesitas:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// While básico
+int contador = 1;
+while (contador <= 5) {
+    System.out.println("Contador: " + contador);
+    contador++;
+}
+
+// While con condición de entrada de usuario
+Scanner scanner = new Scanner(System.in);
+String respuesta = "";
+
+while (!respuesta.equalsIgnoreCase("salir")) {
+    System.out.print("Escribe algo (o 'salir'): ");
+    respuesta = scanner.nextLine();
+    System.out.println("Escribiste: " + respuesta);
+}
+
+// While para validación
+int numero = -1;
+while (numero < 0 || numero > 100) {
+    System.out.print("Ingresa un número entre 0 y 100: ");
+    numero = scanner.nextInt();
+    if (numero < 0 || numero > 100) {
+        System.out.println("Número inválido, intenta de nuevo.");
+    }
+}
+
+// Cuidado con loops infinitos (¡evitar!)
+// while (true) {
+//     System.out.println("Esto nunca termina");
+// }</code></pre>
+                            </div>
+                            <div class="alert alert-warning">
+                                <strong>⚠️ Cuidado:</strong> Asegúrate de que la condición del <code>while</code> eventualmente
+                                sea falsa, o tendrás un loop infinito.
+                            </div>
+                        `,
+                        ejercicio: "Crea un juego de adivinanza donde el usuario tiene que adivinar un número entre 1 y 100."
+                    },
+                    {
+                        id: "do-while-loop",
+                        titulo: "Ciclo Do-While y Control de Flujo",
+                        contenido: `
+                            <h4>Do-While: Ejecutar al Menos Una Vez</h4>
+                            <p>Similar a <code>while</code>, pero garantiza al menos una ejecución:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Do-while: se ejecuta al menos una vez
+int numero;
+Scanner scanner = new Scanner(System.in);
+
+do {
+    System.out.print("Ingresa un número positivo: ");
+    numero = scanner.nextInt();
+} while (numero <= 0);
+
+System.out.println("Número válido: " + numero);
+
+// Comparación: while vs do-while
+int x = 10;
+
+// While: NO se ejecuta porque la condición es falsa desde el inicio
+while (x < 5) {
+    System.out.println("Esto nunca se imprime");
+}
+
+// Do-while: SE ejecuta una vez aunque la condición sea falsa
+do {
+    System.out.println("Esto se imprime una vez");
+} while (x < 5);</code></pre>
+                            </div>
+                            <h5>Control de Flujo: break y continue</h5>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// break: sale completamente del ciclo
+for (int i = 1; i <= 10; i++) {
+    if (i == 5) {
+        break; // Termina el loop cuando i es 5
+    }
+    System.out.println(i); // Imprime 1, 2, 3, 4
+}
+
+// continue: salta a la siguiente iteración
+for (int i = 1; i <= 10; i++) {
+    if (i % 2 == 0) {
+        continue; // Salta los números pares
+    }
+    System.out.println(i); // Imprime solo impares: 1, 3, 5, 7, 9
+}
+
+// Búsqueda con break
+int[] numeros = {5, 10, 15, 20, 25};
+int buscar = 15;
+boolean encontrado = false;
+
+for (int num : numeros) {
+    if (num == buscar) {
+        encontrado = true;
+        break; // Ya lo encontré, no sigo buscando
+    }
+}
+
+System.out.println(encontrado ? "Encontrado" : "No encontrado");</code></pre>
+                            </div>
+                            <h5>¿Cuándo usar cada ciclo?</h5>
+                            <ul>
+                                <li><strong>for:</strong> Cuando sabes cuántas iteraciones necesitas</li>
+                                <li><strong>while:</strong> Cuando no sabes cuántas iteraciones, pero puede ser cero</li>
+                                <li><strong>do-while:</strong> Cuando necesitas ejecutar al menos una vez</li>
+                            </ul>
+                        `,
+                        ejercicio: "Crea un menú interactivo que se repita hasta que el usuario elija 'Salir'."
+                    }
+                ]
+            },
+            6: {
+                titulo: "Métodos/Funciones",
+                lecciones: [
+                    {
+                        id: "metodos-basicos",
+                        titulo: "Introducción a los Métodos",
+                        contenido: `
+                            <h4>¿Qué son los Métodos?</h4>
+                            <p>Los métodos (o funciones) son bloques de código reutilizables que realizan una tarea específica:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Método sin parámetros ni retorno
+public static void saludar() {
+    System.out.println("¡Hola, mundo!");
+}
+
+// Método con parámetros
+public static void saludarPersona(String nombre) {
+    System.out.println("¡Hola, " + nombre + "!");
+}
+
+// Método con retorno
+public static int sumar(int a, int b) {
+    return a + b;
+}
+
+// Método con múltiples parámetros y retorno
+public static double calcularPromedio(int nota1, int nota2, int nota3) {
+    double suma = nota1 + nota2 + nota3;
+    return suma / 3;
+}
+
+// Uso de los métodos en main
+public static void main(String[] args) {
+    saludar();                          // ¡Hola, mundo!
+    saludarPersona("Kevin");            // ¡Hola, Kevin!
+
+    int resultado = sumar(5, 3);
+    System.out.println("Suma: " + resultado); // Suma: 8
+
+    double promedio = calcularPromedio(90, 85, 95);
+    System.out.println("Promedio: " + promedio); // Promedio: 90.0
+}</code></pre>
+                            </div>
+                            <h5>Estructura de un Método</h5>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">modificador tipoRetorno nombreMetodo(parametros) {
+    // cuerpo del método
+    return valor; // si tipoRetorno no es void
+}</code></pre>
+                            </div>
+                            <ul>
+                                <li><strong>modificador:</strong> public, private, static</li>
+                                <li><strong>tipoRetorno:</strong> int, double, String, void (no retorna nada)</li>
+                                <li><strong>nombreMetodo:</strong> usa camelCase (ej: calcularArea)</li>
+                                <li><strong>parametros:</strong> valores que recibe el método</li>
+                            </ul>
+                        `,
+                        ejercicio: "Crea métodos para calcular el área de un círculo, rectángulo y triángulo.",
+                        miniEjercicio: {
+                            pregunta: "¿Qué palabra clave se usa cuando un método no retorna valor?",
+                            opciones: ["null", "void", "return", "none"],
+                            respuestaCorrecta: 1
+                        }
+                    },
+                    {
+                        id: "sobrecarga-metodos",
+                        titulo: "Sobrecarga de Métodos",
+                        contenido: `
+                            <h4>Múltiples Métodos con el Mismo Nombre</h4>
+                            <p>La sobrecarga (overloading) permite crear varios métodos con el mismo nombre pero diferentes parámetros:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Sobrecarga de métodos: mismo nombre, diferentes parámetros
+public static int sumar(int a, int b) {
+    return a + b;
+}
+
+public static double sumar(double a, double b) {
+    return a + b;
+}
+
+public static int sumar(int a, int b, int c) {
+    return a + b + c;
+}
+
+public static String sumar(String a, String b) {
+    return a + b; // Concatenación
+}
+
+// Uso
+public static void main(String[] args) {
+    System.out.println(sumar(5, 3));           // 8 (int)
+    System.out.println(sumar(5.5, 3.2));       // 8.7 (double)
+    System.out.println(sumar(1, 2, 3));        // 6 (int, tres parámetros)
+    System.out.println(sumar("Hola", "Mundo")); // HolaMundo (String)
+}
+
+// Otro ejemplo: calcular área
+public static double calcularArea(double radio) {
+    return Math.PI * radio * radio; // Círculo
+}
+
+public static double calcularArea(double base, double altura) {
+    return base * altura; // Rectángulo
+}
+
+public static double calcularArea(double base, double altura, String tipo) {
+    if (tipo.equals("triangulo")) {
+        return (base * altura) / 2;
+    }
+    return base * altura;
+}</code></pre>
+                            </div>
+                            <div class="alert alert-info">
+                                <strong>💡 Reglas de sobrecarga:</strong>
+                                <ul>
+                                    <li>Mismo nombre de método</li>
+                                    <li>Diferente cantidad de parámetros, O</li>
+                                    <li>Diferente tipo de parámetros</li>
+                                    <li>El tipo de retorno NO importa para la sobrecarga</li>
+                                </ul>
+                            </div>
+                        `,
+                        ejercicio: "Crea un método 'imprimir' sobrecargado que pueda recibir int, double, String o un array."
+                    },
+                    {
+                        id: "ambito-recursividad",
+                        titulo: "Ámbito de Variables y Recursividad",
+                        contenido: `
+                            <h4>Ámbito (Scope) de Variables</h4>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">public class EjemploAmbito {
+    // Variable de clase (global)
+    static int variableGlobal = 100;
+
+    public static void metodo1() {
+        int variableLocal = 10; // Solo existe en metodo1
+        System.out.println(variableGlobal); // ✓ Accede a global
+        System.out.println(variableLocal);   // ✓ Accede a local
+    }
+
+    public static void metodo2() {
+        System.out.println(variableGlobal);  // ✓ Accede a global
+        // System.out.println(variableLocal); // ✗ Error: no existe aquí
+
+        int variableLocal = 20; // Diferente de la de metodo1
+    }
+}</code></pre>
+                            </div>
+                            <h4>Recursividad: Métodos que se Llaman a Sí Mismos</h4>
+                            <p>Un método recursivo se llama a sí mismo para resolver problemas dividiéndolos en subproblemas más pequeños:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Factorial recursivo: 5! = 5 * 4 * 3 * 2 * 1
+public static int factorial(int n) {
+    // Caso base: detiene la recursión
+    if (n == 0 || n == 1) {
+        return 1;
+    }
+    // Caso recursivo
+    return n * factorial(n - 1);
+}
+
+// Fibonacci recursivo: 0, 1, 1, 2, 3, 5, 8, 13...
+public static int fibonacci(int n) {
+    if (n <= 1) {
+        return n;
+    }
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+
+// Suma de números del 1 al n
+public static int sumaRecursiva(int n) {
+    if (n == 1) {
+        return 1;
+    }
+    return n + sumaRecursiva(n - 1);
+}
+
+// Uso
+public static void main(String[] args) {
+    System.out.println(factorial(5));     // 120
+    System.out.println(fibonacci(7));     // 13
+    System.out.println(sumaRecursiva(10)); // 55
+}</code></pre>
+                            </div>
+                            <div class="alert alert-warning">
+                                <strong>⚠️ Importante:</strong> Toda recursión debe tener:
+                                <ol>
+                                    <li><strong>Caso base:</strong> condición que detiene la recursión</li>
+                                    <li><strong>Caso recursivo:</strong> llama al método con un valor más cercano al caso base</li>
+                                </ol>
+                                Sin caso base, tendrás un StackOverflowError (recursión infinita).
+                            </div>
+                            <h5>Comparación: Iterativo vs Recursivo</h5>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Factorial iterativo (con loop)
+public static int factorialIterativo(int n) {
+    int resultado = 1;
+    for (int i = 1; i <= n; i++) {
+        resultado *= i;
+    }
+    return resultado;
+}
+
+// Factorial recursivo (más elegante pero menos eficiente)
+public static int factorialRecursivo(int n) {
+    if (n <= 1) return 1;
+    return n * factorialRecursivo(n - 1);
+}</code></pre>
+                            </div>
+                        `,
+                        ejercicio: "Implementa un método recursivo que calcule la potencia de un número (base^exponente)."
+                    }
+                ]
+            },
+            7: {
+                titulo: "Clases y Objetos Básicos",
+                lecciones: [
+                    {
+                        id: "clases-objetos-intro",
+                        titulo: "Introducción a la POO",
+                        contenido: `
+                            <h4>Programación Orientada a Objetos (POO)</h4>
+                            <p>Java es un lenguaje orientado a objetos. Los objetos son instancias de clases que combinan datos (atributos) y comportamiento (métodos):</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">// Definición de una clase
+public class Persona {
+    // Atributos (características)
+    String nombre;
+    int edad;
+    String correo;
+
+    // Método (comportamiento)
+    void presentarse() {
+        System.out.println("Hola, soy " + nombre + " y tengo " + edad + " años.");
+    }
+
+    void cumplirAnios() {
+        edad++;
+        System.out.println("¡Feliz cumpleaños! Ahora tengo " + edad + " años.");
+    }
+}
+
+// Uso de la clase (crear objetos)
+public class Main {
+    public static void main(String[] args) {
+        // Crear objetos (instancias de la clase)
+        Persona persona1 = new Persona();
+        persona1.nombre = "Kevin";
+        persona1.edad = 25;
+        persona1.correo = "kevin@email.com";
+
+        Persona persona2 = new Persona();
+        persona2.nombre = "María";
+        persona2.edad = 30;
+        persona2.correo = "maria@email.com";
+
+        // Llamar métodos
+        persona1.presentarse(); // Hola, soy Kevin y tengo 25 años.
+        persona2.presentarse(); // Hola, soy María y tengo 30 años.
+
+        persona1.cumplirAnios(); // ¡Feliz cumpleaños! Ahora tengo 26 años.
+    }
+}</code></pre>
+                            </div>
+                            <h5>Conceptos Clave</h5>
+                            <ul>
+                                <li><strong>Clase:</strong> Plantilla o molde que define atributos y métodos</li>
+                                <li><strong>Objeto:</strong> Instancia específica de una clase con valores concretos</li>
+                                <li><strong>Atributo:</strong> Variable que pertenece a una clase (característica)</li>
+                                <li><strong>Método:</strong> Función que pertenece a una clase (comportamiento)</li>
+                                <li><strong>new:</strong> Palabra clave para crear objetos</li>
+                            </ul>
+                        `,
+                        ejercicio: "Crea una clase 'Coche' con atributos (marca, modelo, año) y métodos (arrancar, acelerar, frenar).",
+                        miniEjercicio: {
+                            pregunta: "¿Qué palabra clave se usa para crear un objeto?",
+                            opciones: ["create", "new", "object", "instance"],
+                            respuestaCorrecta: 1
+                        }
+                    },
+                    {
+                        id: "constructores",
+                        titulo: "Constructores",
+                        contenido: `
+                            <h4>Inicializando Objetos con Constructores</h4>
+                            <p>Un constructor es un método especial que se ejecuta automáticamente al crear un objeto:</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">public class Persona {
+    String nombre;
+    int edad;
+
+    // Constructor sin parámetros (por defecto)
+    public Persona() {
+        nombre = "Sin nombre";
+        edad = 0;
+        System.out.println("Se creó una persona");
+    }
+
+    // Constructor con parámetros
+    public Persona(String nombre, int edad) {
+        this.nombre = nombre; // 'this' se refiere al atributo de la clase
+        this.edad = edad;
+    }
+
+    // Sobrecarga de constructores
+    public Persona(String nombre) {
+        this.nombre = nombre;
+        this.edad = 18; // Valor por defecto
+    }
+
+    void presentarse() {
+        System.out.println("Soy " + nombre + ", tengo " + edad + " años.");
+    }
+}
+
+// Uso
+public class Main {
+    public static void main(String[] args) {
+        Persona p1 = new Persona(); // Usa constructor sin parámetros
+        p1.presentarse(); // Soy Sin nombre, tengo 0 años.
+
+        Persona p2 = new Persona("Kevin", 25); // Usa constructor con 2 parámetros
+        p2.presentarse(); // Soy Kevin, tengo 25 años.
+
+        Persona p3 = new Persona("Ana"); // Usa constructor con 1 parámetro
+        p3.presentarse(); // Soy Ana, tengo 18 años.
+    }
+}</code></pre>
+                            </div>
+                            <div class="alert alert-info">
+                                <strong>💡 Características de los constructores:</strong>
+                                <ul>
+                                    <li>Tienen el mismo nombre que la clase</li>
+                                    <li>No tienen tipo de retorno (ni void)</li>
+                                    <li>Se ejecutan automáticamente al crear objetos con <code>new</code></li>
+                                    <li>Pueden sobrecargarse (múltiples constructores)</li>
+                                    <li><code>this</code> diferencia entre parámetros y atributos</li>
+                                </ul>
+                            </div>
+                        `,
+                        ejercicio: "Agrega constructores a tu clase 'Coche' para inicializar los atributos al crear objetos."
+                    },
+                    {
+                        id: "encapsulamiento",
+                        titulo: "Encapsulamiento: Getters y Setters",
+                        contenido: `
+                            <h4>Protegiendo los Datos de la Clase</h4>
+                            <p>El encapsulamiento es ocultar los atributos y acceder a ellos mediante métodos (getters y setters):</p>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">public class CuentaBancaria {
+    // Atributos privados (no accesibles directamente desde fuera)
+    private String titular;
+    private double saldo;
+    private String numeroCuenta;
+
+    // Constructor
+    public CuentaBancaria(String titular, String numeroCuenta) {
+        this.titular = titular;
+        this.numeroCuenta = numeroCuenta;
+        this.saldo = 0.0;
+    }
+
+    // Getter: obtener valor
+    public String getTitular() {
+        return titular;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public String getNumeroCuenta() {
+        return numeroCuenta;
+    }
+
+    // Setter: establecer valor (con validación)
+    public void setTitular(String titular) {
+        if (titular != null && !titular.isEmpty()) {
+            this.titular = titular;
+        }
+    }
+
+    // Métodos de negocio
+    public void depositar(double cantidad) {
+        if (cantidad > 0) {
+            saldo += cantidad;
+            System.out.println("Depósito exitoso. Nuevo saldo: $" + saldo);
+        } else {
+            System.out.println("Cantidad inválida");
+        }
+    }
+
+    public void retirar(double cantidad) {
+        if (cantidad > 0 && cantidad <= saldo) {
+            saldo -= cantidad;
+            System.out.println("Retiro exitoso. Nuevo saldo: $" + saldo);
+        } else {
+            System.out.println("Fondos insuficientes o cantidad inválida");
+        }
+    }
+
+    public void mostrarInfo() {
+        System.out.println("Cuenta: " + numeroCuenta);
+        System.out.println("Titular: " + titular);
+        System.out.println("Saldo: $" + saldo);
+    }
+}
+
+// Uso
+public class Main {
+    public static void main(String[] args) {
+        CuentaBancaria cuenta = new CuentaBancaria("Kevin Arauz", "001-123456");
+
+        // No podemos hacer: cuenta.saldo = 1000000; // Error: saldo es private
+
+        // Usamos métodos públicos
+        cuenta.depositar(5000);
+        cuenta.retirar(2000);
+        cuenta.mostrarInfo();
+
+        System.out.println("Saldo actual: $" + cuenta.getSaldo());
+    }
+}</code></pre>
+                            </div>
+                            <h5>Modificadores de Acceso</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Modificador</th>
+                                        <th>Descripción</th>
+                                        <th>Accesible desde</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>private</code></td>
+                                        <td>Solo dentro de la misma clase</td>
+                                        <td>La clase</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>public</code></td>
+                                        <td>Accesible desde cualquier lugar</td>
+                                        <td>Todas partes</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>protected</code></td>
+                                        <td>Clase, paquete y subclases</td>
+                                        <td>Herencia</td>
+                                    </tr>
+                                    <tr>
+                                        <td>(sin modificador)</td>
+                                        <td>Solo dentro del mismo paquete</td>
+                                        <td>Paquete</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="alert alert-success">
+                                <strong>✅ Buena práctica:</strong>
+                                <ul>
+                                    <li>Atributos: <code>private</code></li>
+                                    <li>Constructores y métodos públicos: <code>public</code></li>
+                                    <li>Métodos auxiliares internos: <code>private</code></li>
+                                </ul>
+                            </div>
+                        `,
+                        ejercicio: "Convierte tu clase 'Coche' en una clase encapsulada con atributos privados y getters/setters."
+                    }
+                ]
+            },
+            8: {
+                titulo: "Consolidación y Práctica",
+                lecciones: [
+                    {
+                        id: "proyecto-gestion-estudiantes",
+                        titulo: "Proyecto: Sistema de Gestión de Estudiantes",
+                        contenido: `
+                            <h4>Proyecto Integrador 1</h4>
+                            <p>Crea un sistema completo de gestión de estudiantes que integre todos los conceptos aprendidos:</p>
+                            <div class="alert alert-primary">
+                                <h5>Requisitos del Sistema</h5>
+                                <ol>
+                                    <li><strong>Clase Estudiante:</strong>
+                                        <ul>
+                                            <li>Atributos privados: nombre, edad, carnet, promedio</li>
+                                            <li>Constructores sobrecargados</li>
+                                            <li>Getters y setters con validación</li>
+                                            <li>Método para calcular si está aprobado (promedio >= 60)</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Clase GestorEstudiantes:</strong>
+                                        <ul>
+                                            <li>Array para almacenar hasta 50 estudiantes</li>
+                                            <li>Método para agregar estudiante</li>
+                                            <li>Método para buscar estudiante por carnet</li>
+                                            <li>Método para listar todos los estudiantes</li>
+                                            <li>Método para calcular promedio general</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Menú Interactivo:</strong>
+                                        <ul>
+                                            <li>Agregar estudiante</li>
+                                            <li>Buscar estudiante</li>
+                                            <li>Listar todos</li>
+                                            <li>Mostrar estadísticas</li>
+                                            <li>Salir</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                            <h5>Ejemplo de Código Base</h5>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">import java.util.Scanner;
+
+public class Estudiante {
+    private String nombre;
+    private int edad;
+    private String carnet;
+    private double promedio;
+
+    public Estudiante(String nombre, int edad, String carnet, double promedio) {
+        this.nombre = nombre;
+        this.edad = edad;
+        this.carnet = carnet;
+        this.promedio = promedio;
+    }
+
+    public boolean estaAprobado() {
+        return promedio >= 60;
+    }
+
+    public void mostrarInfo() {
+        System.out.println("=== Información del Estudiante ===");
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Edad: " + edad);
+        System.out.println("Carnet: " + carnet);
+        System.out.println("Promedio: " + promedio);
+        System.out.println("Estado: " + (estaAprobado() ? "APROBADO" : "REPROBADO"));
+    }
+
+    // Getters y setters aquí...
+}
+
+// ¡Completa el resto del sistema!</code></pre>
+                            </div>
+                        `,
+                        ejercicio: "Implementa el sistema completo con todas las funcionalidades solicitadas."
+                    },
+                    {
+                        id: "proyecto-calculadora-avanzada",
+                        titulo: "Proyecto: Calculadora Avanzada",
+                        contenido: `
+                            <h4>Proyecto Integrador 2</h4>
+                            <p>Desarrolla una calculadora avanzada orientada a objetos:</p>
+                            <div class="alert alert-primary">
+                                <h5>Especificaciones</h5>
+                                <ul>
+                                    <li><strong>Clase CalculadoraBasica:</strong>
+                                        <ul>
+                                            <li>Métodos: sumar, restar, multiplicar, dividir</li>
+                                            <li>Validación de división por cero</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Clase CalculadoraCientifica (hereda de CalculadoraBasica):</strong>
+                                        <ul>
+                                            <li>Métodos adicionales: potencia, raizCuadrada, factorial</li>
+                                            <li>Uso de Math.pow() y Math.sqrt()</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Interfaz de Usuario:</strong>
+                                        <ul>
+                                            <li>Menú con todas las operaciones</li>
+                                            <li>Historial de las últimas 10 operaciones</li>
+                                            <li>Manejo de errores y validación de entrada</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="codigo-ejemplo">
+                                <pre><code class="language-java">public class CalculadoraBasica {
+    protected double resultado;
+
+    public double sumar(double a, double b) {
+        resultado = a + b;
+        return resultado;
+    }
+
+    public double dividir(double a, double b) {
+        if (b == 0) {
+            System.out.println("Error: División por cero");
+            return 0;
+        }
+        resultado = a / b;
+        return resultado;
+    }
+
+    public double getResultado() {
+        return resultado;
+    }
+
+    // Completa con restar y multiplicar...
+}
+
+public class CalculadoraCientifica extends CalculadoraBasica {
+    public double potencia(double base, double exponente) {
+        resultado = Math.pow(base, exponente);
+        return resultado;
+    }
+
+    public int factorial(int n) {
+        if (n < 0) return -1;
+        if (n == 0 || n == 1) return 1;
+        int fact = 1;
+        for (int i = 2; i <= n; i++) {
+            fact *= i;
+        }
+        return fact;
+    }
+
+    // Completa con raizCuadrada y otras operaciones...
+}</code></pre>
+                            </div>
+                        `,
+                        ejercicio: "Implementa la calculadora completa con menú interactivo y historial de operaciones."
+                    },
+                    {
+                        id: "ejercicios-consolidacion",
+                        titulo: "Ejercicios de Consolidación",
+                        contenido: `
+                            <h4>Ejercicios Adicionales para Practicar</h4>
+                            <p>Resuelve estos ejercicios para consolidar todos los conocimientos:</p>
+
+                            <h5>1. Sistema de Biblioteca</h5>
+                            <ul>
+                                <li>Clase Libro (título, autor, ISBN, disponible)</li>
+                                <li>Clase Biblioteca (array de libros)</li>
+                                <li>Métodos: prestar libro, devolver libro, buscar por título/autor</li>
+                                <li>Reportes: libros disponibles, libros prestados</li>
+                            </ul>
+
+                            <h5>2. Juego de Adivinanza Mejorado</h5>
+                            <ul>
+                                <li>Clase Juego con niveles de dificultad (fácil: 1-50, medio: 1-100, difícil: 1-500)</li>
+                                <li>Sistema de puntuación basado en intentos</li>
+                                <li>Pistas ("muy cerca", "frío", "caliente")</li>
+                                <li>Historial de partidas</li>
+                            </ul>
+
+                            <h5>3. Conversor de Unidades</h5>
+                            <ul>
+                                <li>Clase ConversorTemperatura (Celsius, Fahrenheit, Kelvin)</li>
+                                <li>Clase ConversorDistancia (metros, kilómetros, millas, pies)</li>
+                                <li>Clase ConversorPeso (gramos, kilogramos, libras, onzas)</li>
+                                <li>Menú interactivo para elegir tipo de conversión</li>
+                            </ul>
+
+                            <h5>4. Agenda de Contactos</h5>
+                            <ul>
+                                <li>Clase Contacto (nombre, teléfono, email, dirección)</li>
+                                <li>Clase Agenda (array de contactos)</li>
+                                <li>Funciones: agregar, eliminar, buscar, editar contactos</li>
+                                <li>Ordenar alfabéticamente</li>
+                                <li>Exportar a formato de texto</li>
+                            </ul>
+
+                            <h5>5. Sistema de Empleados</h5>
+                            <ul>
+                                <li>Clase Empleado (nombre, ID, salario base, departamento)</li>
+                                <li>Métodos para calcular salario con bonos y descuentos</li>
+                                <li>Reporte de nómina total</li>
+                                <li>Buscar empleados por departamento</li>
+                                <li>Calcular promedio de salarios</li>
+                            </ul>
+
+                            <div class="alert alert-success">
+                                <h5>Checklist de Conceptos a Aplicar</h5>
+                                <ul class="list-unstyled">
+                                    <li>☑ Variables y tipos de datos</li>
+                                    <li>☑ Operadores (aritméticos, lógicos, comparación)</li>
+                                    <li>☑ Condicionales (if-else, switch)</li>
+                                    <li>☑ Ciclos (for, while, do-while)</li>
+                                    <li>☑ Métodos con parámetros y retorno</li>
+                                    <li>☑ Clases y objetos</li>
+                                    <li>☑ Constructores</li>
+                                    <li>☑ Encapsulamiento (getters/setters)</li>
+                                    <li>☑ Arrays</li>
+                                    <li>☑ Validación de entrada</li>
+                                </ul>
+                            </div>
+
+                            <div class="alert alert-info">
+                                <h5>Recursos Adicionales para Seguir Aprendiendo</h5>
+                                <ul>
+                                    <li><strong>Siguiente paso:</strong> Aprende sobre colecciones (ArrayList, HashMap)</li>
+                                    <li><strong>Profundiza en POO:</strong> Herencia, polimorfismo, interfaces</li>
+                                    <li><strong>Manejo de excepciones:</strong> try-catch, throw, custom exceptions</li>
+                                    <li><strong>Archivo I/O:</strong> Lectura y escritura de archivos</li>
+                                    <li><strong>Interfaz gráfica:</strong> JavaFX o Swing</li>
+                                    <li><strong>Base de datos:</strong> JDBC para conectar con MySQL/PostgreSQL</li>
+                                </ul>
+                            </div>
+                        `,
+                        ejercicio: "Elige al menos 2 de los 5 ejercicios y resuélvelos completamente aplicando todos los conceptos del curso."
+                    }
+                ]
+            }
+        };
+
+        // Funciones principales
+        function empezarCurso() {
+            document.getElementById('lecciones').scrollIntoView({ behavior: 'smooth' });
+            mostrarContenidoSemana(1);
+        }
+
+        function mostrarContenidoSemana(numeroSemana) {
+            semanaActual = numeroSemana;
+            
+            // Actualizar botones desktop
+            document.querySelectorAll('.semana-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.dataset.semana) === numeroSemana) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Actualizar navegación móvil
+            actualizarNavegacionMovil(numeroSemana);
+            
+            // Actualizar grid móvil
+            document.querySelectorAll('.semana-grid-item').forEach(item => {
+                item.classList.remove('active');
+                if (parseInt(item.dataset.semana) === numeroSemana) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Generar contenido
+            const contenido = contenidoPorSemana[numeroSemana];
+            const contenidoDiv = document.getElementById('contenido-leccion');
+            
+            let html = `
+                <div class="leccion-content fade-in-up">
+                    <h3><i class="fas fa-book"></i> ${contenido.titulo}</h3>
+                    <div class="row">
+            `;
+            
+            if (contenido.lecciones.length === 0) {
+                html += `
+                    <div class="col-12 mb-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-construction fa-3x text-muted mb-3"></i>
+                                <h5>Contenido en desarrollo</h5>
+                                <p class="text-muted">Esta semana aún está en construcción. ¡Pronto estará disponible!</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                contenido.lecciones.forEach((leccion, index) => {
+                    const completada = leccionesCompletadas[leccion.id] ? 'completada' : '';
+                    html += `
+                        <div class="col-12 mb-4">
+                            <div class="card leccion-item ${completada}">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        ${leccion.titulo}
+                                        ${completada ? '<i class="fas fa-check-circle text-success ms-2"></i>' : ''}
+                                    </h5>
+                                    <div class="leccion-contenido">
+                                        ${leccion.contenido}
+                                    </div>
+                                    <div class="mt-3">
+                                        <h6><i class="fas fa-tasks"></i> Ejercicio Práctico:</h6>
+                                        <p class="text-muted">${leccion.ejercicio}</p>
+                                        
+                                        ${leccion.miniEjercicio ? `
+                                            <div class="mini-ejercicio mt-3 p-3 border rounded">
+                                                <h6><i class="fas fa-code"></i> Mini-Ejercicio:</h6>
+                                                <p>${leccion.miniEjercicio.pregunta}</p>
+                                                <div class="ejercicio-opciones">
+                                                    ${leccion.miniEjercicio.opciones.map((opcion, idx) => `
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="ejercicio_${leccion.id}" 
+                                                                   id="opcion_${leccion.id}_${idx}" value="${idx}">
+                                                            <label class="form-check-label" for="opcion_${leccion.id}_${idx}">
+                                                                ${opcion}
+                                                            </label>
+                                                        </div>
+                                                    `).join('')}
+                                                </div>
+                                                <button class="btn btn-primary btn-sm mt-2" onclick="verificarRespuesta('${leccion.id}', ${leccion.miniEjercicio.respuestaCorrecta})">
+                                                    Verificar Respuesta
+                                                </button>
+                                                <div id="resultado_${leccion.id}" class="mt-2"></div>
+                                            </div>
+                                        ` : ''}
+                                        
+                                        <div class="mt-3">
+                                            <button class="btn btn-sm ${completada ? 'btn-success' : 'btn-outline-primary'}" 
+                                                    onclick="marcarLeccionCompletada('${leccion.id}')">
+                                                ${completada ? 'Completada' : 'Marcar como completada'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            contenidoDiv.innerHTML = html;
+            
+            // Activar syntax highlighting
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
+            
+            actualizarProgreso();
+        }
+
+        function marcarLeccionCompletada(leccionId) {
+            leccionesCompletadas[leccionId] = true;
+            localStorage.setItem('leccionesCompletadas', JSON.stringify(leccionesCompletadas));
+            mostrarContenidoSemana(semanaActual);
+            actualizarProgreso();
+        }
+
+        function verificarRespuesta(leccionId, respuestaCorrecta) {
+            const opciones = document.querySelectorAll(`input[name="ejercicio_${leccionId}"]`);
+            const resultadoDiv = document.getElementById(`resultado_${leccionId}`);
+            
+            let respuestaSeleccionada = -1;
+            opciones.forEach((opcion, index) => {
+                if (opcion.checked) {
+                    respuestaSeleccionada = index;
+                }
+            });
+            
+            if (respuestaSeleccionada === -1) {
+                resultadoDiv.innerHTML = '<div class="alert alert-warning">Por favor selecciona una respuesta.</div>';
+                return;
+            }
+            
+            if (respuestaSeleccionada === respuestaCorrecta) {
+                resultadoDiv.innerHTML = '<div class="alert alert-success"><i class="fas fa-check"></i> ¡Correcto! Excelente trabajo.</div>';
+                // Marcar mini-ejercicio como completado
+                const ejerciciosCompletados = JSON.parse(localStorage.getItem('ejerciciosCompletados')) || {};
+                ejerciciosCompletados[leccionId] = true;
+                localStorage.setItem('ejerciciosCompletados', JSON.stringify(ejerciciosCompletados));
+            } else {
+                resultadoDiv.innerHTML = '<div class="alert alert-danger"><i class="fas fa-times"></i> Incorrecto. Revisa el contenido y vuelve a intentarlo.</div>';
+            }
+        }
+
+        function actualizarProgreso() {
+            const totalLecciones = Object.values(contenidoPorSemana)
+                .reduce((total, semana) => total + semana.lecciones.length, 0);
+            
+            const leccionesCompletas = Object.keys(leccionesCompletadas).length;
+            
+            const porcentaje = Math.round((leccionesCompletas / totalLecciones) * 100);
+            
+            const progressBar = document.getElementById('progreso-general');
+            progressBar.style.width = porcentaje + '%';
+            progressBar.textContent = porcentaje + '%';
+            
+            // Actualizar cards de semana
+            for (let semana = 1; semana <= 8; semana++) {
+                const leccionesSemana = contenidoPorSemana[semana].lecciones;
+                const completadasSemana = leccionesSemana.filter(l => leccionesCompletadas[l.id]).length;
+                const porcentajeSemana = leccionesSemana.length > 0 ? Math.round((completadasSemana / leccionesSemana.length) * 100) : 0;
+                
+                const card = document.querySelector(`[data-semana="${semana}"]`);
+                if (card) {
+                    const badge = card.querySelector('.badge');
+                    badge.textContent = `${porcentajeSemana}% completado`;
+                    badge.className = `badge ${porcentajeSemana === 100 ? 'bg-success' : porcentajeSemana > 0 ? 'bg-warning' : 'bg-secondary'}`;
+                    
+                    card.className = `card semana-card ${porcentajeSemana === 100 ? 'completada' : porcentajeSemana > 0 ? 'en-progreso' : ''}`;
+                }
+                
+                // Actualizar grid móvil
+                const gridItem = document.querySelector(`.semana-grid-item[data-semana="${semana}"]`);
+                if (gridItem) {
+                    const progressText = gridItem.querySelector('.semana-progress');
+                    if (progressText) {
+                        progressText.textContent = `${porcentajeSemana}%`;
+                    }
+                }
+            }
+        }
+
+        // Funciones para navegación móvil
+        function actualizarNavegacionMovil(semana) {
+            const semanaTexts = {
+                1: "Semana 1: Fundamentos",
+                2: "Semana 2: Variables", 
+                3: "Semana 3: Operadores",
+                4: "Semana 4: Condicionales",
+                5: "Semana 5: Ciclos",
+                6: "Semana 6: Métodos",
+                7: "Semana 7: Clases",
+                8: "Semana 8: Práctica"
+            };
+            
+            const semanaActualText = document.getElementById('semana-actual-text');
+            if (semanaActualText) {
+                semanaActualText.textContent = semanaTexts[semana] || `Semana ${semana}`;
+            }
+            
+            // Actualizar botones anterior/siguiente
+            const btnAnterior = document.getElementById('btn-anterior');
+            const btnSiguiente = document.getElementById('btn-siguiente');
+            
+            if (btnAnterior) {
+                btnAnterior.disabled = semana <= 1;
+                btnAnterior.className = semana <= 1 ? 'btn btn-secondary btn-mobile disabled' : 'btn btn-outline-secondary btn-mobile';
+            }
+            
+            if (btnSiguiente) {
+                btnSiguiente.disabled = semana >= 8;
+                btnSiguiente.className = semana >= 8 ? 'btn btn-secondary btn-mobile disabled' : 'btn btn-outline-secondary btn-mobile';
+            }
+        }
+
+        function cambiarSemana(direccion) {
+            const nuevaSemana = semanaActual + direccion;
+            if (nuevaSemana >= 1 && nuevaSemana <= 8) {
+                mostrarContenidoSemana(nuevaSemana);
+            }
+        }
+
+        function ejecutarCodigo() {
+            const codigo = document.getElementById('editor-codigo').value;
+            const resultado = document.getElementById('resultado-codigo');
+            
+            if (codigo.trim() === '') {
+                resultado.textContent = 'Por favor, escribe algún código para ejecutar.';
+                return;
+            }
+            
+            // Simulación simple de ejecución
+            let output = 'Simulación de ejecución:\n\n';
+            
+            // Buscar println statements
+            const printMatches = codigo.match(/System\.out\.println\s*\(\s*"([^"]*)"\s*\)/g);
+            if (printMatches) {
+                printMatches.forEach(match => {
+                    const text = match.match(/"([^"]*)"/)[1];
+                    output += text + '\n';
+                });
+            } else {
+                output += 'Código compilado exitosamente.\n';
+                output += 'No se encontraron instrucciones de salida (System.out.println).\n';
+            }
+            
+            output += '\n¡Recuerda probar tu código en un IDE real!';
+            
+            resultado.textContent = output;
+        }
+
+        function limpiarCodigo() {
+            document.getElementById('editor-codigo').value = `public class MiPrograma {
+    public static void main(String[] args) {
+        System.out.println("¡Hola Mundo!");
+    }
+}`;
+            document.getElementById('resultado-codigo').textContent = 'Aquí aparecerá el resultado de tu código...';
+        }
+
+        // Función para buscar en el glosario
+        function buscarEnGlosario() {
+            const termino = document.getElementById('buscar-glosario').value.toLowerCase().trim();
+            const glosarioItems = document.querySelectorAll('.glosario-item');
+            const categorias = document.querySelectorAll('.glosario-categoria');
+            
+            // Limpiar highlights previos
+            document.querySelectorAll('.highlight-search').forEach(element => {
+                element.outerHTML = element.innerHTML;
+            });
+            
+            if (termino === '') {
+                // Mostrar todo si no hay término de búsqueda
+                glosarioItems.forEach(item => {
+                    item.classList.remove('hidden');
+                });
+                categorias.forEach(categoria => {
+                    categoria.classList.remove('empty');
+                });
+                return;
+            }
+            
+            let itemsVisibles = 0;
+            
+            glosarioItems.forEach(item => {
+                const texto = item.textContent.toLowerCase();
+                
+                if (texto.includes(termino)) {
+                    item.classList.remove('hidden');
+                    itemsVisibles++;
+                    
+                    // Highlight del término encontrado
+                    const strong = item.querySelector('strong');
+                    const p = item.querySelector('p');
+                    
+                    if (strong && strong.textContent.toLowerCase().includes(termino)) {
+                        highlightTermino(strong, termino);
+                    }
+                    if (p && p.textContent.toLowerCase().includes(termino)) {
+                        highlightTermino(p, termino);
+                    }
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            
+            // Verificar categorías vacías
+            categorias.forEach(categoria => {
+                const itemsVisiblesEnCategoria = categoria.querySelectorAll('.glosario-item:not(.hidden)').length;
+                if (itemsVisiblesEnCategoria === 0) {
+                    categoria.classList.add('empty');
+                } else {
+                    categoria.classList.remove('empty');
+                }
+            });
+            
+            // Mensaje si no se encontraron resultados
+            if (itemsVisibles === 0) {
+                mostrarMensajeNoResultados();
+            } else {
+                ocultarMensajeNoResultados();
+            }
+        }
+
+        function highlightTermino(elemento, termino) {
+            const texto = elemento.innerHTML;
+            const regex = new RegExp(`(${termino})`, 'gi');
+            elemento.innerHTML = texto.replace(regex, '<span class="highlight-search">$1</span>');
+        }
+
+        function mostrarMensajeNoResultados() {
+            const contenedor = document.querySelector('#glosario .container');
+            let mensaje = document.getElementById('no-resultados');
+            
+            if (!mensaje) {
+                mensaje = document.createElement('div');
+                mensaje.id = 'no-resultados';
+                mensaje.className = 'alert alert-info text-center mt-4';
+                mensaje.innerHTML = '<i class="fas fa-search"></i> No se encontraron términos que coincidan con tu búsqueda.';
+                contenedor.appendChild(mensaje);
+            }
+            
+            mensaje.style.display = 'block';
+        }
+
+        function ocultarMensajeNoResultados() {
+            const mensaje = document.getElementById('no-resultados');
+            if (mensaje) {
+                mensaje.style.display = 'none';
+            }
+        }
+
+        // Cheat Sheets - Contenido
+        const cheatSheets = {
+            variables: {
+                titulo: "Variables y Tipos de Datos",
+                contenido: `
+VARIABLES Y TIPOS DE DATOS EN JAVA
+================================
+
+1. TIPOS PRIMITIVOS
+------------------
+• byte     → 8 bits  (-128 a 127)
+• short    → 16 bits (-32,768 a 32,767)
+• int      → 32 bits (-2^31 a 2^31-1)
+• long     → 64 bits (agregar L al final)
+• float    → 32 bits (agregar f al final)
+• double   → 64 bits (decimales)
+• boolean  → true/false
+• char     → Un carácter ('A')
+
+2. DECLARACIÓN DE VARIABLES
+--------------------------
+tipo nombre;                    // Declaración
+tipo nombre = valor;           // Declaración + inicialización
+int x = 10, y = 20, z = 30;   // Múltiples variables
+
+3. CONSTANTES
+------------
+final tipo NOMBRE = valor;
+final double PI = 3.14159;
+
+4. CASTING (CONVERSIÓN)
+----------------------
+// Implícito (automático)
+int entero = 10;
+double decimal = entero;  // 10.0
+
+// Explícito (manual)
+double precio = 19.99;
+int precioEntero = (int) precio;  // 19
+
+// String conversions
+String numeroTexto = "123";
+int numero = Integer.parseInt(numeroTexto);
+String edadTexto = String.valueOf(25);
+
+5. EJEMPLOS PRÁCTICOS
+--------------------
+int edad = 25;
+double altura = 1.75;
+String nombre = "Kevin";
+boolean estudiante = true;
+char inicial = 'K';
+                `
+            },
+            operadores: {
+                titulo: "Operadores en Java",
+                contenido: `
+OPERADORES EN JAVA
+=================
+
+1. OPERADORES ARITMÉTICOS
+------------------------
++   → Suma
+-   → Resta
+*   → Multiplicación
+/   → División
+%   → Módulo (resto)
+++  → Incremento
+--  → Decremento
+
+Ejemplos:
+int a = 10, b = 3;
+int suma = a + b;        // 13
+int division = a / b;    // 3 (división entera)
+int resto = a % b;       // 1
+a++;  // a = 11
+
+2. OPERADORES DE COMPARACIÓN
+---------------------------
+==  → Igual a
+!=  → Diferente de
+<   → Menor que
+>   → Mayor que
+<=  → Menor o igual
+>=  → Mayor o igual
+
+Ejemplos:
+boolean resultado = (5 > 3);     // true
+boolean iguales = (x == y);      // depende de x,y
+
+3. OPERADORES LÓGICOS
+--------------------
+&&  → AND lógico
+||  → OR lógico
+!   → NOT lógico
+
+Ejemplos:
+boolean mayorEdad = edad >= 18;
+boolean tieneLicencia = true;
+boolean puedeConducir = mayorEdad && tieneLicencia;
+
+4. OPERADORES DE ASIGNACIÓN
+--------------------------
+=   → Asignación
++=  → Suma y asigna
+-=  → Resta y asigna
+*=  → Multiplica y asigna
+/=  → Divide y asigna
+%=  → Módulo y asigna
+
+Ejemplos:
+int x = 10;
+x += 5;  // x = x + 5 = 15
+x *= 2;  // x = x * 2 = 30
+
+5. PRECEDENCIA DE OPERADORES
+---------------------------
+1. () paréntesis
+2. ++ -- ! (unarios)
+3. * / %
+4. + -
+5. < <= > >=
+6. == !=
+7. &&
+8. ||
+9. = += -= *= /=
+                `
+            },
+            control: {
+                titulo: "Estructuras de Control",
+                contenido: `
+ESTRUCTURAS DE CONTROL
+=====================
+
+1. CONDICIONALES IF-ELSE
+-----------------------
+// If simple
+if (condición) {
+    // código
+}
+
+// If-else
+if (condición) {
+    // código si true
+} else {
+    // código si false
+}
+
+// If-else if-else
+if (condición1) {
+    // código 1
+} else if (condición2) {
+    // código 2
+} else {
+    // código por defecto
+}
+
+2. SWITCH
+---------
+switch (variable) {
+    case valor1:
+        // código
+        break;
+    case valor2:
+        // código
+        break;
+    default:
+        // código por defecto
+        break;
+}
+
+3. OPERADOR TERNARIO
+-------------------
+variable = (condición) ? valorSiTrue : valorSiFalse;
+
+4. BUCLE FOR
+-----------
+for (inicialización; condición; incremento) {
+    // código
+}
+
+5. BUCLE WHILE
+-------------
+while (condición) {
+    // código
+    // actualizar variable de control
+}
+
+6. BUCLE DO-WHILE
+----------------
+do {
+    // código
+} while (condición);
+
+7. CONTROL DE BUCLES
+-------------------
+break;    → Sale del bucle inmediatamente
+continue; → Salta a la siguiente iteración
+                `
+            },
+            metodos: {
+                titulo: "Métodos en Java",
+                contenido: `
+MÉTODOS EN JAVA
+==============
+
+1. ESTRUCTURA BÁSICA
+--------------------
+modificador tipoRetorno nombreMetodo(parámetros) {
+    // código
+    return valor; // si no es void
+}
+
+2. TIPOS DE MÉTODOS
+------------------
+// Método sin parámetros ni retorno
+public static void saludar() {
+    System.out.println("¡Hola!");
+}
+
+// Método con parámetros pero sin retorno
+public static void saludarPersona(String nombre) {
+    System.out.println("¡Hola " + nombre + "!");
+}
+
+// Método con parámetros y retorno
+public static int sumar(int a, int b) {
+    return a + b;
+}
+
+// Método que retorna boolean
+public static boolean esPar(int numero) {
+    return numero % 2 == 0;
+}
+
+3. LLAMADA A MÉTODOS
+-------------------
+saludar();                        // Método void
+saludarPersona("Kevin");          // Con parámetros
+int resultado = sumar(5, 3);      // Con retorno
+boolean par = esPar(10);          // Boolean
+
+4. SOBRECARGA DE MÉTODOS
+-----------------------
+// Mismo nombre, diferentes parámetros
+public static int sumar(int a, int b) {
+    return a + b;
+}
+
+public static double sumar(double a, double b) {
+    return a + b;
+}
+
+public static int sumar(int a, int b, int c) {
+    return a + b + c;
+}
+
+5. BUENAS PRÁCTICAS
+------------------
+• Usar nombres descriptivos
+• Un método debe hacer una sola cosa
+• Máximo 3-4 parámetros por método
+• Documentar métodos complejos
+• Usar verbos para nombres de métodos
+
+6. EJEMPLOS PRÁCTICOS
+--------------------
+public static double calcularArea(double radio) {
+    return Math.PI * radio * radio;
+}
+
+public static double calcularArea(double largo, double ancho) {
+    return largo * ancho;
+}
+
+public static boolean validarEdad(int edad) {
+    return edad >= 0 && edad <= 120;
+}
+                `
+            },
+            clases: {
+                titulo: "Clases y Objetos",
+                contenido: `
+CLASES Y OBJETOS EN JAVA
+=======================
+
+1. DEFINICIÓN DE CLASE
+----------------------
+public class NombreClase {
+    // Atributos (variables de instancia)
+    // Constructores
+    // Métodos
+}
+
+2. ESTRUCTURA COMPLETA
+---------------------
+public class Persona {
+    // Atributos privados
+    private String nombre;
+    private int edad;
+    
+    // Constructor por defecto
+    public Persona() {
+        this.nombre = "Sin nombre";
+        this.edad = 0;
+    }
+    
+    // Constructor con parámetros
+    public Persona(String nombre, int edad) {
+        this.nombre = nombre;
+        this.edad = edad;
+    }
+    
+    // Getters
+    public String getNombre() {
+        return nombre;
+    }
+    
+    public int getEdad() {
+        return edad;
+    }
+    
+    // Setters
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public void setEdad(int edad) {
+        if (edad >= 0) {
+            this.edad = edad;
+        }
+    }
+    
+    // Métodos de comportamiento
+    public void saludar() {
+        System.out.println("Hola, soy " + nombre);
+    }
+    
+    public boolean esMayorDeEdad() {
+        return edad >= 18;
+    }
+}
+
+3. CREAR Y USAR OBJETOS
+----------------------
+// Crear objetos
+Persona persona1 = new Persona();
+Persona persona2 = new Persona("Ana", 25);
+
+// Usar métodos
+persona1.setNombre("Carlos");
+persona1.setEdad(30);
+persona1.saludar();
+
+String nombre = persona2.getNombre();
+boolean mayor = persona2.esMayorDeEdad();
+
+4. CONSTRUCTORES
+---------------
+• Mismo nombre que la clase
+• No tienen tipo de retorno
+• Se ejecutan al crear un objeto
+• Pueden ser sobrecargados
+
+5. ENCAPSULACIÓN
+---------------
+• Atributos private
+• Métodos public para acceso
+• Validación en setters
+
+6. PALABRA CLAVE THIS
+--------------------
+• Referencia al objeto actual
+• Usar cuando hay ambigüedad
+• Llamar a otros constructores
+
+public void setNombre(String nombre) {
+    this.nombre = nombre;  // this.nombre es el atributo
+}
+                `
+            },
+            sintaxis: {
+                titulo: "Sintaxis Básica de Java",
+                contenido: `
+SINTAXIS BÁSICA DE JAVA
+======================
+
+1. ESTRUCTURA DE PROGRAMA
+-------------------------
+public class MiClase {
+    public static void main(String[] args) {
+        // Tu código aquí
+        System.out.println("¡Hola Mundo!");
+    }
+}
+
+2. REGLAS DE NOMENCLATURA
+------------------------
+Clases:
+• PascalCase: MiClase, EstudianteUniversitario
+• Nombres descriptivos
+• Empezar con letra mayúscula
+
+Variables y métodos:
+• camelCase: miVariable, calcularPromedio
+• Empezar con letra minúscula
+• Nombres descriptivos
+
+Constantes:
+• MAYÚSCULAS: PI, MAX_SIZE, NOMBRE_EMPRESA
+• Separar palabras con guión bajo
+
+3. COMENTARIOS
+-------------
+// Comentario de una línea
+
+/*
+   Comentario de
+   múltiples líneas
+*/
+
+/**
+ * Comentario de documentación (JavaDoc)
+ * @param nombre El nombre de la persona
+ * @return El saludo formateado
+ */
+
+4. PUNTO Y COMA
+--------------
+• Cada declaración termina con ;
+• Obligatorio en Java
+
+int edad = 25;
+String nombre = "Kevin";
+System.out.println("Hola");
+
+5. LLAVES { }
+------------
+• Delimitan bloques de código
+• Obligatorias en clases y métodos
+• Recomendadas siempre en if, for, while
+
+if (edad >= 18) {
+    System.out.println("Mayor de edad");
+}
+
+6. IMPORTS
+---------
+• Al inicio del archivo
+• Antes de la declaración de clase
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.*;  // Importar todo el paquete
+
+7. BUENAS PRÁCTICAS
+------------------
+• Usar espacios para legibilidad
+• Indentar con 4 espacios o 1 tab
+• Una declaración por línea
+• Líneas no muy largas (máximo 80-120 caracteres)
+• Usar nombres descriptivos
+
+// Bien
+int edadEstudiante = 20;
+double promedioCalificaciones = 8.5;
+
+// Mal
+int e = 20;
+double p = 8.5;
+                `
+            }
+        };
+
+        function descargarCheatSheet(tipo) {
+            const cheatSheet = cheatSheets[tipo];
+            if (!cheatSheet) {
+                alert('Cheat sheet no encontrado');
+                return;
+            }
+            
+            // Crear el contenido del archivo
+            const contenido = `${cheatSheet.titulo}\n${'='.repeat(cheatSheet.titulo.length)}\n\n${cheatSheet.contenido}`;
+            
+            // Crear blob y descargar
+            const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `java-${tipo}-cheatsheet.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            
+            // Mostrar mensaje de confirmación
+            const Toast = {
+                show: function(message) {
+                    const toast = document.createElement('div');
+                    toast.className = 'alert alert-success position-fixed';
+                    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+                    toast.innerHTML = `<i class="fas fa-download"></i> ${message}`;
+                    document.body.appendChild(toast);
+                    
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        setTimeout(() => {
+                            if (toast.parentNode) {
+                                toast.parentNode.removeChild(toast);
+                            }
+                        }, 300);
+                    }, 2000);
+                }
+            };
+            
+            Toast.show(`Cheat Sheet "${cheatSheet.titulo}" descargado correctamente`);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botones de semana desktop
+            document.querySelectorAll('.semana-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const semana = parseInt(this.dataset.semana);
+                    mostrarContenidoSemana(semana);
+                });
+            });
+            
+            // Cards de semana
+            document.querySelectorAll('.semana-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const semana = parseInt(this.dataset.semana);
+                    mostrarContenidoSemana(semana);
+                    document.getElementById('lecciones').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // Grid móvil de semanas
+            document.querySelectorAll('.semana-grid-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const semana = parseInt(this.dataset.semana);
+                    mostrarContenidoSemana(semana);
+                });
+            });
+            
+            // Dropdown móvil de semanas
+            document.querySelectorAll('.semana-dropdown').forEach(dropdown => {
+                dropdown.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const semana = parseInt(this.dataset.semana);
+                    mostrarContenidoSemana(semana);
+                });
+            });
+            
+            // Mostrar primera semana por defecto
+            mostrarContenidoSemana(1);
+            actualizarProgreso();
+            
+            // Búsqueda en tiempo real en el glosario
+            const buscarInput = document.getElementById('buscar-glosario');
+            if (buscarInput) {
+                buscarInput.addEventListener('input', buscarEnGlosario);
+                buscarInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        buscarEnGlosario();
+                    }
+                });
+            }
+            
+            // Smooth scrolling para navegación
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+
+        // Función para resetear progreso (para pruebas)
+        function resetearProgreso() {
+            localStorage.removeItem('leccionesCompletadas');
+            leccionesCompletadas = {};
+            actualizarProgreso();
+            mostrarContenidoSemana(semanaActual);
+        }
+    </script>
+</body>
+</html>
