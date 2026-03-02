@@ -27,9 +27,11 @@ java NombreArchivo.java
 ```
 
 ## Estructura de Archivos
-- `*.md`: Explicaciones teóricas (como `explicacion_if_java.md`).
+- `temas/`: Carpeta con los 19 temas del curso en formato `.md` (numerados del 1 al 19).
+- `*.md`: Explicaciones teóricas adicionales (como `explicacion_if_java.md`, `hallazgos.md`).
 - `*.html`: Recursos web (como `portal-java-completo.html`).
 - `*.java`: Ejemplos de código y ejercicios.
+- `Notas.txt`: Apuntes rápidos del curso.
 
 ## Pautas de Código
 - Los nombres de las clases deben comenzar con Mayúscula (`MiClase`).
