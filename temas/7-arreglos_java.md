@@ -275,6 +275,25 @@ Kevin     91              87              93
 
 ---
 
+## 11.- Ejercicio Práctico: Comparación de Eficiencia
+
+En la carpeta `ejercicios/` hemos añadido el archivo `BusquedaNumeros.java` para demostrar la **importancia de los arreglos**.
+
+El ejercicio compara dos enfoques para buscar el número **60**:
+
+1.  **❌ Sin Arreglos (Manual):**
+    *   Se declaran 20 variables (`int numero1`, `int numero2`...).
+    *   Se necesitan 20 condiciones `if-else if` para revisar cada una.
+    *   Es **imposible de mantener** si el número de datos crece (ej. 1000 datos).
+
+2.  **✅ Con Arreglos (Óptimo):**
+    *   Se crea un arreglo `int[] numeros`.
+    *   Un simple ciclo `for` recorre y busca el dato, sin importar si son 20 o 100,000 elementos.
+
+> **Pruébalo tú mismo:** Compila y ejecuta el archivo para ver la diferencia en limpieza de código y escalabilidad.
+
+---
+
 ## Resumen rápido
 
 | Concepto              | Descripción                                       |
