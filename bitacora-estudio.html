@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bitácora de Estudio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f0f4f8;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .card-header-custom {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      color: white;
+      border-radius: 12px 12px 0 0 !important;
+      padding: 1.5rem 2rem;
+    }
+
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+      font-weight: 600;
+      color: #37474f;
+      font-size: 0.9rem;
+    }
+
+    .section-title {
+      color: #1a237e;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #e8eaf6;
+      padding-bottom: 6px;
+      margin-bottom: 1rem;
+    }
+
+    .btn-registrar {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      border: none;
+      padding: 0.75rem 2.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      border-radius: 8px;
+      transition: opacity 0.2s;
+    }
+
+    .btn-registrar:hover {
+      opacity: 0.9;
+    }
+
+    .btn-limpiar {
+      border-radius: 8px;
+      padding: 0.75rem 2rem;
+      font-weight: 600;
+    }
+
+    /* Resultado */
+    #resultado {
+      display: none;
+    }
+
+    .resultado-card {
+      background: #ffffff;
+      border-left: 5px solid #1a237e;
+      border-radius: 0 12px 12px 0;
+    }
+
+    .resultado-titulo {
+      background: linear-gradient(135deg, #1a237e, #283593);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0 8px 0 0;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .resultado-body {
+      padding: 1.5rem 2rem;
+    }
+
+    .campo-resultado {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.45rem 0;
+      border-bottom: 1px dashed #e0e0e0;
+    }
+
+    .campo-resultado:last-child {
+      border-bottom: none;
+    }
+
+    .campo-clave {
+      font-weight: 700;
+      color: #37474f;
+      min-width: 160px;
+    }
+
+    .campo-valor {
+      color: #1a237e;
+      font-weight: 600;
+      text-align: right;
+      flex: 1;
+    }
+
+    .estrellas {
+      color: #fdd835;
+      font-size: 1rem;
+    }
+
+    .badge-tipo {
+      font-size: 0.85rem;
+      padding: 0.35em 0.8em;
+      border-radius: 6px;
+    }
+
+    .duracion-display {
+      background: #e8eaf6;
+      border: 1px solid #c5cae9;
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-weight: 700;
+      color: #1a237e;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: #3949ab;
+      box-shadow: 0 0 0 0.2rem rgba(57, 73, 171, 0.25);
+    }
+
+    .stars-input label {
+      font-size: 1.6rem;
+      color: #ccc;
+      cursor: pointer;
+      transition: color 0.15s;
+      line-height: 1;
+    }
+
+    .stars-input input[type="radio"] {
+      display: none;
+    }
+
+    .stars-input:hover label,
+    .stars-input label:hover ~ label {
+      color: #ccc;
+    }
+
+    .stars-input label:hover,
+    .stars-input input[type="radio"]:checked ~ label {
+      color: #fdd835;
+    }
+
+    .stars-input {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+    }
+
+    .stars-input label:hover,
+    .stars-input label:hover ~ label {
+      color: #fdd835 !important;
+    }
+
+    .stars-input input[type="radio"]:checked + label,
+    .stars-input input[type="radio"]:checked + label ~ label {
+      color: #fdd835;
+    }
+
+    /* Editor de subtema */
+    .editor-wrap {
+      border: 1px solid #c5cae9;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .editor-wrap:focus-within {
+      border-color: #3949ab;
+      box-shadow: 0 0 0 0.2rem rgba(57, 73, 171, 0.25);
+    }
+
+    .editor-toolbar {
+      background: #f0f3ff;
+      border-bottom: 1px solid #c5cae9;
+      padding: 6px 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .editor-btn {
+      font-size: 0.78rem;
+      padding: 3px 9px;
+      border-color: #c5cae9;
+      color: #37474f;
+      background: white;
+      border-radius: 5px;
+      border: 1px solid #c5cae9;
+      cursor: pointer;
+      transition: all 0.15s;
+      line-height: 1.4;
+    }
+
+    .editor-btn:hover {
+      background: #e8eaf6;
+      border-color: #3949ab;
+      color: #1a237e;
+    }
+
+    .editor-textarea {
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      resize: vertical;
+      min-height: 110px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    /* Resultado multilinea */
+    .campo-resultado-block {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .campo-valor-block {
+      color: #1a237e;
+      font-weight: 500;
+      white-space: pre-wrap;
+      width: 100%;
+      margin-top: 6px;
+      padding: 10px 14px;
+      background: #f5f7ff;
+      border-radius: 6px;
+      border-left: 3px solid #3949ab;
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 576px) {
+      .campo-resultado {
+        flex-direction: column;
+      }
+      .campo-valor {
+        text-align: left;
+        margin-top: 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+
+        <!-- FORMULARIO -->
+        <div class="card mb-4">
+          <div class="card-header-custom">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-journal-bookmark-fill fs-2"></i>
+              <div>
+                <h4 class="mb-0 fw-bold">Bitácora de Estudio</h4>
+                <small class="opacity-75">Registra tu sesión de aprendizaje</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-body p-4">
+            <form id="formBitacora" novalidate>
+
+              <!-- TIEMPO -->
+              <p class="section-title"><i class="bi bi-clock me-1"></i> Tiempo</p>
+              <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                  <label for="fecha" class="form-label">Fecha</label>
+                  <input type="date" class="form-control" id="fecha" required />
+                  <div class="invalid-feedback">Campo requerido.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="horaInicio" class="form-label">Hora inicio</label>
+                  <input type="time" class="form-control" id="horaInicio" required />
+                  <div class="invalid-feedback">Campo requerido.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="horaFin" class="form-label">Hora fin</label>
+                  <input type="time" class="form-control" id="horaFin" required />
+                  <div class="invalid-feedback">Campo requerido.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Duración calculada</label>
+                  <div class="duracion-display" id="duracionDisplay">
+                    <i class="bi bi-stopwatch me-2"></i><span id="duracionTexto">-- minutos</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SESIÓN -->
+              <p class="section-title"><i class="bi bi-book me-1"></i> Sesión</p>
+              <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                  <label for="tipo" class="form-label">Tipo</label>
+                  <select class="form-select" id="tipo" required onchange="toggleOtroTipo(this.value)">
+                    <option value="" disabled selected>Seleccionar...</option>
+                    <option>CURSO</option>
+                    <option>LIBRO</option>
+                    <option>PRÁCTICA</option>
+                    <option>PROYECTO</option>
+                    <option>REVISIÓN</option>
+                    <option>OTRO</option>
+                  </select>
+                  <div class="invalid-feedback">Campo requerido.</div>
+                </div>
+                <div class="col-md-8" id="otroTipoWrap" style="display:none;">
+                  <label for="otroTipo" class="form-label">Especifica el tipo</label>
+                  <input type="text" class="form-control" id="otroTipo" placeholder="Ej: Podcast, Mentoría..." />
+                  <div class="invalid-feedback">Por favor especifica el tipo.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="fuente" class="form-label">Fuente</label>
+                  <input type="text" class="form-control" id="fuente" placeholder="Ej: Udemy, YouTube..." required />
+                  <div class="invalid-feedback">Campo requerido.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="curso" class="form-label">Curso / Recurso</label>
+                  <input type="text" class="form-control" id="curso" placeholder="Ej: Java desde cero" required />
+                  <div class="invalid-feedback">Campo requerido.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="tema" class="form-label">Tema</label>
+                  <input type="text" class="form-control" id="tema" placeholder="Ej: Variables" required />
+                  <div class="invalid-feedback">Campo requerido.</div>
+                </div>
+                <div class="col-12">
+                  <label class="form-label">Subtemas / Descripción</label>
+                  <div class="editor-wrap">
+                    <div class="editor-toolbar">
+                      <button type="button" class="editor-btn" onclick="insertarEditor('vineta')" title="Viñeta principal">&#8226; Viñeta</button>
+                      <button type="button" class="editor-btn" onclick="insertarEditor('subvineta')" title="Sub-viñeta indentada">&#9702; Sub-viñeta</button>
+                      <button type="button" class="editor-btn" onclick="insertarEditor('numero')" title="Elemento numerado">1. Numerado</button>
+                      <button type="button" class="editor-btn" onclick="insertarEditor('separador')" title="Línea separadora">&#9135; Separador</button>
+                    </div>
+                    <textarea class="form-control editor-textarea" id="subtema" rows="5"
+                      placeholder="Ejemplo:&#10;• Tipos de datos primitivos&#10;  ◦ int, double, boolean, char&#10;  ◦ byte, short, long, float&#10;• String y su uso&#10;• Declaración de variables&#10;─────────────&#10;1. Reglas de nombres&#10;2. Asignación de valores"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- EVALUACIÓN -->
+              <p class="section-title"><i class="bi bi-star me-1"></i> Evaluación</p>
+              <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                  <label class="form-label d-block">Comprensión (1-5)</label>
+                  <div class="stars-input" id="starsComprension">
+                    <input type="radio" name="comprension" id="c5" value="5" /><label for="c5" title="5">&#9733;</label>
+                    <input type="radio" name="comprension" id="c4" value="4" /><label for="c4" title="4">&#9733;</label>
+                    <input type="radio" name="comprension" id="c3" value="3" /><label for="c3" title="3">&#9733;</label>
+                    <input type="radio" name="comprension" id="c2" value="2" /><label for="c2" title="2">&#9733;</label>
+                    <input type="radio" name="comprension" id="c1" value="1" /><label for="c1" title="1">&#9733;</label>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label d-block">Energía (1-5)</label>
+                  <div class="stars-input" id="starsEnergia">
+                    <input type="radio" name="energia" id="e5" value="5" /><label for="e5" title="5">&#9733;</label>
+                    <input type="radio" name="energia" id="e4" value="4" /><label for="e4" title="4">&#9733;</label>
+                    <input type="radio" name="energia" id="e3" value="3" /><label for="e3" title="3">&#9733;</label>
+                    <input type="radio" name="energia" id="e2" value="2" /><label for="e2" title="2">&#9733;</label>
+                    <input type="radio" name="energia" id="e1" value="1" /><label for="e1" title="1">&#9733;</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- NOTAS -->
+              <p class="section-title"><i class="bi bi-pencil me-1"></i> Notas</p>
+              <div class="row g-3 mb-4">
+                <div class="col-12">
+                  <label for="motivoRetraso" class="form-label">Motivo de retraso / desviación</label>
+                  <input type="text" class="form-control" id="motivoRetraso" placeholder="Ej: Se revisó con más detalle..." />
+                </div>
+                <div class="col-12">
+                  <label for="observaciones" class="form-label">Observaciones</label>
+                  <textarea class="form-control" id="observaciones" rows="3" placeholder="Escribe tus notas aquí..."></textarea>
+                </div>
+              </div>
+
+              <!-- BOTONES -->
+              <div class="d-flex gap-2 justify-content-end flex-wrap">
+                <button type="button" class="btn btn-outline-secondary btn-limpiar" onclick="limpiarFormulario()">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Limpiar
+                </button>
+                <button type="submit" class="btn btn-primary btn-registrar text-white">
+                  <i class="bi bi-check2-circle me-1"></i> Registrar sesión
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- RESULTADO -->
+        <div id="resultado">
+          <div class="resultado-card shadow-sm">
+            <div class="resultado-titulo d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-clipboard-check me-2"></i> Registro de sesión guardado</span>
+              <button class="btn btn-sm btn-light fw-semibold" onclick="descargarTxt()" title="Descargar como TXT">
+                <i class="bi bi-download me-1"></i> Descargar TXT
+              </button>
+            </div>
+            <div class="resultado-body" id="resultadoBody"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Editor de subtema: insertar elementos en el cursor
+    function insertarEditor(tipo) {
+      const ta = document.getElementById('subtema');
+      const start = ta.selectionStart;
+      const end   = ta.selectionEnd;
+      const val   = ta.value;
+      const needsNewline = start > 0 && val[start - 1] !== '\n';
+
+      let insert = '';
+      if (tipo === 'vineta') {
+        insert = (needsNewline ? '\n' : '') + '• ';
+      } else if (tipo === 'subvineta') {
+        insert = (needsNewline ? '\n' : '') + '  ◦ ';
+      } else if (tipo === 'numero') {
+        const textoBefore = val.slice(0, start);
+        const matches = textoBefore.match(/^\d+\./gm) || [];
+        const nextNum = matches.length + 1;
+        insert = (needsNewline ? '\n' : '') + nextNum + '. ';
+      } else if (tipo === 'separador') {
+        insert = (needsNewline ? '\n' : '') + '─────────────────────\n';
+      }
+
+      ta.value = val.slice(0, start) + insert + val.slice(end);
+      ta.selectionStart = ta.selectionEnd = start + insert.length;
+      ta.focus();
+    }
+
+    // Mostrar/ocultar campo "Otro tipo"
+    function toggleOtroTipo(valor) {
+      const wrap = document.getElementById('otroTipoWrap');
+      const input = document.getElementById('otroTipo');
+      if (valor === 'OTRO') {
+        wrap.style.display = 'block';
+        input.required = true;
+      } else {
+        wrap.style.display = 'none';
+        input.required = false;
+        input.value = '';
+      }
+    }
+
+    // Calcular duración automáticamente
+    const horaInicio = document.getElementById('horaInicio');
+    const horaFin = document.getElementById('horaFin');
+    const duracionTexto = document.getElementById('duracionTexto');
+
+    function calcularDuracion() {
+      const inicio = horaInicio.value;
+      const fin = horaFin.value;
+      if (!inicio || !fin) { duracionTexto.textContent = '-- minutos'; return null; }
+
+      const [hi, mi] = inicio.split(':').map(Number);
+      const [hf, mf] = fin.split(':').map(Number);
+      let totalMin = (hf * 60 + mf) - (hi * 60 + mi);
+
+      if (totalMin <= 0) { duracionTexto.textContent = 'Hora fin debe ser mayor'; return null; }
+
+      const h = Math.floor(totalMin / 60);
+      const m = totalMin % 60;
+      const texto = h > 0 ? `${h}h ${m}min (${totalMin} minutos)` : `${totalMin} minutos`;
+      duracionTexto.textContent = texto;
+      return totalMin;
+    }
+
+    horaInicio.addEventListener('change', calcularDuracion);
+    horaFin.addEventListener('change', calcularDuracion);
+
+    function estrellas(n, max = 5) {
+      let s = '';
+      for (let i = 1; i <= max; i++) {
+        s += `<span style="color:${i <= n ? '#fdd835' : '#ccc'}; font-size:1.1rem;">&#9733;</span>`;
+      }
+      return s + ` <small class="text-muted">(${n}/${max})</small>`;
+    }
+
+    function fila(clave, valor) {
+      return `<div class="campo-resultado">
+        <span class="campo-clave">${clave}</span>
+        <span class="campo-valor">${valor}</span>
+      </div>`;
+    }
+
+    function filaBloque(clave, texto) {
+      const escaped = texto.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      return `<div class="campo-resultado campo-resultado-block">
+        <span class="campo-clave">${clave}</span>
+        <div class="campo-valor-block">${escaped}</div>
+      </div>`;
+    }
+
+    function formatearFecha(f) {
+      if (!f) return '';
+      const [y, m, d] = f.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    // Envío del formulario
+    document.getElementById('formBitacora').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Validación Bootstrap
+      if (!this.checkValidity()) {
+        this.classList.add('was-validated');
+        return;
+      }
+
+      const comprension = document.querySelector('input[name="comprension"]:checked');
+      const energia = document.querySelector('input[name="energia"]:checked');
+
+      const tipoSelect = document.getElementById('tipo').value;
+      const tipoFinal = tipoSelect === 'OTRO'
+        ? (document.getElementById('otroTipo').value.trim() || 'OTRO')
+        : tipoSelect;
+
+      const datos = {
+        fecha: document.getElementById('fecha').value,
+        horaInicio: horaInicio.value,
+        horaFin: horaFin.value,
+        duracion: calcularDuracion(),
+        tipo: tipoFinal,
+        fuente: document.getElementById('fuente').value,
+        curso: document.getElementById('curso').value,
+        tema: document.getElementById('tema').value,
+        subtema: document.getElementById('subtema').value,
+        motivoRetraso: document.getElementById('motivoRetraso').value,
+        comprension: comprension ? parseInt(comprension.value) : null,
+        energia: energia ? parseInt(energia.value) : null,
+        observaciones: document.getElementById('observaciones').value,
+      };
+
+      const tipoColores = {
+        'CURSO': 'primary', 'LIBRO': 'success', 'PRÁCTICA': 'warning',
+        'PROYECTO': 'danger', 'REVISIÓN': 'info', 'OTRO': 'secondary'
+      };
+      const badgeColor = tipoColores[datos.tipo] || 'secondary';
+
+      let html = '';
+      html += fila('Fecha', formatearFecha(datos.fecha));
+      html += fila('Hora inicio', datos.horaInicio);
+      html += fila('Hora fin', datos.horaFin);
+      html += fila('Duración', datos.duracion ? `${datos.duracion} minutos` : '--');
+      html += fila('Tipo', `<span class="badge badge-tipo bg-${badgeColor}">${datos.tipo}</span>`);
+      html += fila('Fuente', datos.fuente);
+      html += fila('Curso / Recurso', datos.curso);
+      html += fila('Tema', datos.tema);
+      if (datos.subtema) html += filaBloque('Subtemas', datos.subtema);
+      if (datos.motivoRetraso) html += fila('Motivo retraso', datos.motivoRetraso);
+      html += fila('Comprensión', datos.comprension ? estrellas(datos.comprension) : '<span class="text-muted">No indicado</span>');
+      html += fila('Energía', datos.energia ? estrellas(datos.energia) : '<span class="text-muted">No indicado</span>');
+      if (datos.observaciones) html += fila('Observaciones', `<span style="white-space:pre-wrap; text-align:left;">${datos.observaciones}</span>`);
+
+      document.getElementById('resultadoBody').innerHTML = html;
+      const resultado = document.getElementById('resultado');
+      resultado.style.display = 'block';
+      resultado.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Guardar datos para descarga
+      window._datosBitacora = datos;
+    });
+
+    function descargarTxt() {
+      const d = window._datosBitacora;
+      if (!d) return;
+
+      const estrellasTexto = (n, max = 5) => n ? '★'.repeat(n) + '☆'.repeat(max - n) + ` (${n}/${max})` : 'No indicado';
+
+      const lineas = [
+        '==============================',
+        '   BITÁCORA DE ESTUDIO',
+        '==============================',
+        '',
+        `Fecha         : ${formatearFecha(d.fecha)}`,
+        `Hora inicio   : ${d.horaInicio}`,
+        `Hora fin      : ${d.horaFin}`,
+        `Duración      : ${d.duracion ? d.duracion + ' minutos' : '--'}`,
+        '',
+        `Tipo          : ${d.tipo}`,
+        `Fuente        : ${d.fuente}`,
+        `Curso         : ${d.curso}`,
+        `Tema          : ${d.tema}`,
+        d.subtema ? 'Subtemas      :' : null,
+        d.subtema ? d.subtema.split('\n').map(l => '  ' + l).join('\n') : null,
+        '',
+        `Comprensión   : ${estrellasTexto(d.comprension)}`,
+        `Energía       : ${estrellasTexto(d.energia)}`,
+        '',
+        d.motivoRetraso  ? `Motivo retraso: ${d.motivoRetraso}` : null,
+        d.observaciones  ? `Observaciones : ${d.observaciones}` : null,
+        '',
+        '==============================',
+      ].filter(l => l !== null).join('\n');
+
+      const blob = new Blob([lineas], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `bitacora_${d.fecha || 'sesion'}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function limpiarFormulario() {
+      const form = document.getElementById('formBitacora');
+      form.reset();
+      form.classList.remove('was-validated');
+      duracionTexto.textContent = '-- minutos';
+      toggleOtroTipo('');
+      document.getElementById('resultado').style.display = 'none';
+      window._datosBitacora = null;
+    }
+  </script>
+</body>
+</html>
