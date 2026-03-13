@@ -1,0 +1,2 @@
+# BITACORA_ESTUDIO_DB | version:1
+# fecha | horaInicio | horaFin | duracion | duracionTexto | tipo | tipoSelect | fuente | curso | tema | subtema | motivoRetraso | comprension | energia | observaciones
