@@ -1,0 +1,5 @@
+# BITACORA_ESTUDIO_DB | version:1
+# fecha | horaInicio | horaFin | duracion | duracionTexto | tipo | tipoSelect | fuente | curso | tema | subtema | motivoRetraso | comprension | energia | observaciones
+2026-03-12 | 20:00 | 21:00 | 60 | 1h 0min (60 minutos) | test | OTRO | udemy | java | variables | • test | se reviso x cosa | 4 | 4 | test
+2026-03-12 | 07:00 | 09:00 | 120 | 2h 0min (120 minutos) | CURSO | CURSO | marcos | java | for | practi | test2 | 5 | 3 | test5
+2026-03-13 | 21:00 | 22:00 | 60 | 1h 0min (60 minutos) | PRÁCTICA | PRÁCTICA | mi pc | java | condiciones con if | • if else | ninguno | 5 | 5 | ninguna
